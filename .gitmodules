@@ -1,4 +1,3 @@
 [submodule "Paperworks/vendor/spdlog"]
 	path = Paperworks/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-	
