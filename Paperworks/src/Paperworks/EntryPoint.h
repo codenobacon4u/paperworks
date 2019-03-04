@@ -5,6 +5,10 @@ extern Paperworks::Application* Paperworks::CreateApplication();
 
 int main(int argc, char** argv)
 {
+	Paperworks::Log::Init();
+	PW_CORE_WARN("Initialized Log!");
+	PW_INFO("Initialized Log!");
+
 	auto app = Paperworks::CreateApplication();
 	app->Run();
 	delete app;

@@ -1,36 +1,102 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Paperworks">
+      <UniqueIdentifier>{73723D6A-5F2A-7FB7-C831-5813B4081AA8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Paperworks\Events">
+      <UniqueIdentifier>{F77E7121-6395-6FB7-AC0C-FBD81862403F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Paperworks\ImGui">
+      <UniqueIdentifier>{DDB17CDA-C9AA-9B2C-F2DC-80B1DE347B38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Paperworks\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Paperworks.h" />
     <ClInclude Include="src\Paperworks\Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>Paperworks</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Paperworks\Core.h">
+      <Filter>Paperworks</Filter>
     </ClInclude>
     <ClInclude Include="src\Paperworks\EntryPoint.h">
-      <Filter>Header Files</Filter>
+      <Filter>Paperworks</Filter>
     </ClInclude>
+    <ClInclude Include="src\Paperworks\Events\ApplicationEvent.h">
+      <Filter>Paperworks\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Events\Event.h">
+      <Filter>Paperworks\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Events\KeyEvent.h">
+      <Filter>Paperworks\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Events\MouseEvent.h">
+      <Filter>Paperworks\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\ImGui\ImGuiLayer.h">
+      <Filter>Paperworks\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Input.h">
+      <Filter>Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\KeyCodes.h">
+      <Filter>Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Layer.h">
+      <Filter>Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\LayerStack.h">
+      <Filter>Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Log.h">
+      <Filter>Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Window.h">
+      <Filter>Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WinInput.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WinWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pwpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Paperworks\Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Paperworks</Filter>
     </ClCompile>
+    <ClCompile Include="src\Paperworks\ImGui\ImGuiBuild.cpp">
+      <Filter>Paperworks\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\ImGui\ImGuiLayer.cpp">
+      <Filter>Paperworks\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Layer.cpp">
+      <Filter>Paperworks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\LayerStack.cpp">
+      <Filter>Paperworks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Log.cpp">
+      <Filter>Paperworks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WinInput.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WinWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pwpch.cpp" />
   </ItemGroup>
 </Project>
