@@ -17,7 +17,7 @@ namespace Paperworks {
 			: Title(title), Width(width), Height(height) {}
 	};
 
-	class PAPERWORKS_API Window
+	class Window
 	{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;

@@ -7,7 +7,7 @@
 
 namespace Paperworks {
 
-	class PAPERWORKS_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();

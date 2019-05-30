@@ -7,3 +7,6 @@
 [submodule "Paperworks/vendor/ImGui"]
 	path = Paperworks/vendor/ImGui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Paperworks/vendor/glm"]
+	path = Paperworks/vendor/glm
+	url = https://github.com/g-truc/glm.git

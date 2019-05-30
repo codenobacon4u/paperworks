@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Paperworks\Window.h"
-#include <Windows.h>
 
 #include <GLFW\glfw3.h>
+
+#include "Paperworks/Graphics/Context.h"
 
 namespace Paperworks {
 	class WinWindow : public Window
@@ -32,6 +33,7 @@ namespace Paperworks {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		Context* m_Context;
 
 		struct WindowData
 		{

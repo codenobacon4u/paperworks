@@ -6,7 +6,7 @@
 #include "Paperworks/Events/ApplicationEvent.h"
 
 namespace Paperworks {
-	class PAPERWORKS_API ImGuiLayer : public Layer
+	class ImGuiLayer : public Layer
 	{
 	public:
 		ImGuiLayer();

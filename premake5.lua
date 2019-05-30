@@ -1,13 +1,12 @@
 workspace "Paperworks"
-	architecture "x64"
-	startproject "Sandbox"
+architecture "x64"
+startproject "Sandbox"
 
-	configurations
-	{
-		"Debug",
-		"Release",
-		"Dist"
-	}
+configurations {
+    "Debug",
+    "Release",
+    "Dist"
+}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -19,127 +18,123 @@ IncludeDir["ImGui"] = "Paperworks/vendor/ImGui"
 IncludeDir["glm"] = "Paperworks/vendor/glm"
 
 group "Dependencies"
-	include "Paperworks/vendor/GLFW"
-	include "Paperworks/vendor/GLAD"
-	include "Paperworks/vendor/ImGui"
+include "Paperworks/vendor/GLFW"
+include "Paperworks/vendor/GLAD"
+include "Paperworks/vendor/ImGui"
 group ""
 
 project "Paperworks"
-	location "Paperworks"
-	kind "SharedLib"
-	language"C++"
-	staticruntime "off"
+location "Paperworks"
+kind "StaticLib"
+language "C++"
+cppdialect "C++17"
+staticruntime "on"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+targetdir("bin/" .. outputdir .. "/%{prj.name}")
+objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "pwpch.h"
-	pchsource "Paperworks/src/pwpch.cpp"
+pchheader "pwpch.h"
+pchsource "Paperworks/src/pwpch.cpp"
 
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-	}
+files {
+    "%{prj.name}/src/**.h",
+    "%{prj.name}/src/**.cpp",
+    "%{prj.name}/vendor/glm/glm/**.hpp",
+    "%{prj.name}/vendor/glm/glm/**.inl"
+}
 
-	includedirs
-	{
-		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGui}"
-		"%{IncludeDir.glm}"
-	}
 
-	links
-	{
-		"GLFW",
-		"GLAD",
-		"ImGui",
-		"opengl32.lib" 
-	}
+defines {
+    "_CRT_SECURE_NO_WARNINGS"
+}
 
-	filter "system:windows"
-		cppdialect "C++17"
-		systemversion "latest"
+includedirs {
+    "%{prj.name}/src",
+    "%{prj.name}/vendor/spdlog/include",
+    "%{IncludeDir.GLFW}",
+    "%{IncludeDir.GLAD}",
+    "%{IncludeDir.ImGui}",
+    "%{IncludeDir.glm}"
+}
 
-		defines
-		{
-			"PW_BUILD_DLL",
-			"PW_PLATFORM_WINDOWS",
-			"GLFW_INCLUDE_NONE"
-		}
+links {
+    "GLFW",
+    "GLAD",
+    "ImGui",
+    "opengl32.lib"
+}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
+filter "system:windows"
+systemversion "latest"
+toolset "v142"
 
-	filter "configurations:Debug"
-		defines "PW_DEBUG"
-		defines "PW_ASSERT_ENABLE"
-		runtime "Debug"
-		symbols "On"
+defines {
+    "PW_BUILD_DLL",
+    "PW_PLATFORM_WINDOWS",
+    "GLFW_INCLUDE_NONE"
+}
 
-	filter "configurations:Release"
-		defines "PW_RELEASE"
-		runtime "Release"
-		optimize "On"
+filter "configurations:Debug"
+defines "PW_DEBUG"
+defines "PW_ASSERT_ENABLE"
+runtime "Debug"
+symbols "on"
 
-	filter "configurations:Dist"
-		defines "PW_DIST"
-		runtime "Release"
-		optimize "On"
+filter "configurations:Release"
+defines "PW_RELEASE"
+runtime "Release"
+optimize "on"
+
+filter "configurations:Dist"
+defines "PW_DIST"
+runtime "Release"
+optimize "on"
 
 project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language"C++"
-	staticruntime "off"
+location "Sandbox"
+kind "ConsoleApp"
+language "C++"
+cppdialect "C++17"
+staticruntime "on"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+targetdir("bin/" .. outputdir .. "/%{prj.name}")
+objdir("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-	}
+files {
+    "%{prj.name}/src/**.h",
+    "%{prj.name}/src/**.cpp"
+}
 
-	includedirs
-	{
-		"Paperworks/vendor/spdlog/include",
-		"Paperworks/src",
-		"Paperworks/vendor"
-		"%%{IncludeDir.glm}"
-	}
+includedirs {
+    "Paperworks/vendor/spdlog/include",
+    "Paperworks/src",
+    "Paperworks/vendor",
+    "%%{IncludeDir.glm}"
+}
 
-	links
-	{
-		"Paperworks"
-	}
+links {
+    "Paperworks"
+}
 
-	filter "system:windows"
-		cppdialect "C++17"
-		systemversion "latest"
+filter "system:windows"
+systemversion "latest"
+toolset "v142"
 
-		defines
-		{
-			"PW_PLATFORM_WINDOWS"
-		}
+defines {
+    "PW_PLATFORM_WINDOWS"
+}
 
-	filter "configurations:Debug"
-		defines "PW_DEBUG"
-		runtime "Debug"
-		symbols "On"
+filter "configurations:Debug"
+defines "PW_DEBUG"
+runtime "Debug"
+symbols "on"
 
-	filter "configurations:Release"
-		defines "PW_RELEASE"
-		runtime "Release"
-		optimize "On"
+filter "configurations:Release"
+defines "PW_RELEASE"
+runtime "Release"
+optimize "on"
 
-	filter "configurations:Dist"
-		defines "PW_DIST"
-		runtime "Release"
-		optimize "On"
+filter "configurations:Dist"
+defines "PW_DIST"
+runtime "Release"
+optimize "on"

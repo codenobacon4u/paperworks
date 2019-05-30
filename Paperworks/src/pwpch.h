@@ -1,6 +1,6 @@
 #pragma once
 
-#include<iostream>
+#include <iostream>
 #include <memory>
 #include <algorithm>
 #include <functional>
@@ -16,4 +16,3 @@
 #ifdef PW_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif // PW_PLATFORM_WINDOWS
-
