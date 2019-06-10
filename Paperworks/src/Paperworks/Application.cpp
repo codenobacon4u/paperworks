@@ -9,7 +9,7 @@ namespace Paperworks {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
-
+	
 	Application::Application()
 	{
 		PW_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -20,39 +20,39 @@ namespace Paperworks {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		// Vertex array
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
 
-		// Vertex buffer
-		glGenBuffers(1, &m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
+		float vertices[3 * 6] = {
+			 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+			-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 		};
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		{
+			BufferLayout layout = {
+				{ShaderDataType::Float3, "a_Position"},
+				{ShaderDataType::Float3, "a_Color"}
+			};
+			m_VertexBuffer->SetLayout(layout);
+		}
+
+		m_VertexArray.reset(VertexArray::Create(m_VertexBuffer->GetLayout()));
 
 		// Index buffer
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-
-		unsigned int indices[3] = { 0, 1, 2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		uint32_t indices[3] = { 0, 1, 2 };
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec3 a_Color;
+			out vec3 outColor;
 
 			void main() {
 				gl_Position = vec4(a_Position, 1.0f);
+				outColor = a_Color;
 			}
 		)";
 
@@ -60,9 +60,10 @@ namespace Paperworks {
 			#version 330 core
 
 			layout(location = 0) out vec4 color;
+			in vec3 outColor;
 
 			void main() {
-				color = vec4(0.8, 0.2, 0.3, 1.0);
+				color = vec4(outColor, 1.0);
 			}
 		)";
 
@@ -101,22 +102,22 @@ namespace Paperworks {
 	void Application::Run() {
 		while (m_Running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			m_Window->OnUpdate();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
+
+			glClearColor(0.1f, 0.1f, 0.1f, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glViewport(0, 0, m_Window.get()->GetWidth(), m_Window.get()->GetHeight());
+			m_Shader->Bind();
+			m_VertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
-			
-			m_Window->OnUpdate();
 		}
 	}
 

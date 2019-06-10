@@ -16,6 +16,7 @@ IncludeDir["GLFW"] = "Paperworks/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Paperworks/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Paperworks/vendor/ImGui"
 IncludeDir["glm"] = "Paperworks/vendor/glm"
+IncludeDir["spdlog"] = "Paperworks/vendor/spdlog/include"
 
 group "Dependencies"
 include "Paperworks/vendor/GLFW"
@@ -50,7 +51,7 @@ defines {
 
 includedirs {
     "%{prj.name}/src",
-    "%{prj.name}/vendor/spdlog/include",
+    "%{IncludeDir.spdlog}",
     "%{IncludeDir.GLFW}",
     "%{IncludeDir.GLAD}",
     "%{IncludeDir.ImGui}",
@@ -106,10 +107,10 @@ files {
 }
 
 includedirs {
-    "Paperworks/vendor/spdlog/include",
     "Paperworks/src",
     "Paperworks/vendor",
-    "%%{IncludeDir.glm}"
+    "%{IncludeDir.glm}",
+    "%{IncludeDir.spdlog}"
 }
 
 links {

@@ -10,11 +10,20 @@
     <Filter Include="src\Paperworks\Events">
       <UniqueIdentifier>{CEC77F76-3A34-3B71-0328-D3CE6F535DD9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Paperworks\Graphics">
+      <UniqueIdentifier>{AA86F4B0-16BE-3C48-1FC8-A06B8B7E6341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Paperworks\Graphics\API">
+      <UniqueIdentifier>{93B0E68F-FFBD-1476-88A4-1061F4B0E02C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Paperworks\ImGui">
       <UniqueIdentifier>{D4BBE941-C04A-730B-6969-870655D783B1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
@@ -66,6 +75,21 @@
     <ClInclude Include="src\Paperworks\Events\MouseEvent.h">
       <Filter>src\Paperworks\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\API\Buffer.h">
+      <Filter>src\Paperworks\Graphics\API</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\API\VertexArray.h">
+      <Filter>src\Paperworks\Graphics\API</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\Context.h">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\Renderer.h">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\Shader.h">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Paperworks\ImGui\ImGuiLayer.h">
       <Filter>src\Paperworks\ImGui</Filter>
     </ClInclude>
@@ -86,6 +110,15 @@
     </ClInclude>
     <ClInclude Include="src\Paperworks\Window.h">
       <Filter>src\Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WinInput.h">
       <Filter>src\Platform\Windows</Filter>
@@ -1188,13 +1221,22 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\Graphics\Context.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Paperworks\Graphics\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Paperworks\Application.cpp">
       <Filter>src\Paperworks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\API\Buffer.cpp">
+      <Filter>src\Paperworks\Graphics\API</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\API\VertexArray.cpp">
+      <Filter>src\Paperworks\Graphics\API</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\Renderer.cpp">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\Shader.cpp">
+      <Filter>src\Paperworks\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Paperworks\ImGui\ImGuiBuild.cpp">
       <Filter>src\Paperworks\ImGui</Filter>
@@ -1211,6 +1253,15 @@
     <ClCompile Include="src\Paperworks\Log.cpp">
       <Filter>src\Paperworks</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WinInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -1220,7 +1271,5 @@
     <ClCompile Include="src\pwpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Paperworks\Graphics\Shader.cpp" />
   </ItemGroup>
 </Project>

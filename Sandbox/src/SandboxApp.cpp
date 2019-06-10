@@ -1,23 +1,23 @@
 #include <Paperworks.h>
 
-class ExampleLayer : public Paperworks::Layer
+class DebugLayer : public Paperworks::Layer
 {
 public:
-	ExampleLayer()
-		: Layer("Example") 
+	DebugLayer()
+		: Layer("Debug") 
 	{
 	}
 
 	void OnUpdate() override
 	{
-		//PW_INFO("ExampleLayer::Update");
-		if (Paperworks::Input::IsKeyPressed(PW_KEY_TAB))
-			PW_INFO("Tab key pressed");
+		
 	}
 
 	void OnEvent(Paperworks::Event& event) override
 	{
-		//PW_TRACE("{0}", event);
+		if (event.GetEventType() == Paperworks::EventType::WindowResize) {
+			PW_CORE_TRACE("{0}", event.ToString());
+		}
 	}
 };
 
@@ -25,7 +25,7 @@ class Sandbox : public Paperworks::Application
 {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer());
+		PushLayer(new DebugLayer());
 	}
 
 	~Sandbox() {

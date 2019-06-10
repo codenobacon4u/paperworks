@@ -31,6 +31,9 @@ namespace Paperworks {
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
+		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
+		io.IniFilename = nullptr;
 
 		ImGui::StyleColorsDark();
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -79,9 +82,20 @@ namespace Paperworks {
 		}
 	}
 
+	static bool show = true;
 	void ImGuiLayer::OnImGuiRender()
 	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		if (show)
+			ImGui::ShowDemoWindow(&show);
+
+		{
+			ImGui::Begin("Information");                          // Create a window called "Hello, world!" and append into it.
+
+			ImGui::Checkbox("Demo Window", &show);      // Edit bools storing our window open/close state
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
+		}
+
 	}
 }
