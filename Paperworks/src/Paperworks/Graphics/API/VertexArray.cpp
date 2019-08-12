@@ -6,14 +6,14 @@
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace Paperworks {
-	VertexArray* VertexArray::Create(BufferLayout layout)
+	VertexArray* VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
-		case API::None:
+		case RendererAPI::API::None:
 			return nullptr;
-		case API::OpenGL:
-			return new OpenGLVertexArray(layout);
+		case RendererAPI::API::OpenGL:
+			return new OpenGLVertexArray();
 		}
 		return nullptr;
 	}

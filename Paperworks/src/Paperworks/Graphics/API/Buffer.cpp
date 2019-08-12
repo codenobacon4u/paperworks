@@ -1,6 +1,6 @@
 #include "pwpch.h"
 
-#include "Paperworks/Graphics/API/Buffer.h"
+#include "Buffer.h"
 #include "Paperworks/Graphics/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
@@ -11,9 +11,9 @@ namespace Paperworks {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case API::None:
+		case RendererAPI::API::None:
 			return nullptr;
-		case API::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, size);
 		}
 		return nullptr;
@@ -23,9 +23,9 @@ namespace Paperworks {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case API::None:
+		case RendererAPI::API::None:
 			return nullptr;
-		case API::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, count);
 		}
 		return nullptr;

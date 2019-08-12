@@ -149,7 +149,10 @@
     <ClInclude Include="src\Paperworks\Events\KeyEvent.h" />
     <ClInclude Include="src\Paperworks\Events\MouseEvent.h" />
     <ClInclude Include="src\Paperworks\Graphics\API\Buffer.h" />
+    <ClInclude Include="src\Paperworks\Graphics\API\RenderCmd.h" />
+    <ClInclude Include="src\Paperworks\Graphics\API\RendererAPI.h" />
     <ClInclude Include="src\Paperworks\Graphics\API\VertexArray.h" />
+    <ClInclude Include="src\Paperworks\Graphics\Camera.h" />
     <ClInclude Include="src\Paperworks\Graphics\Context.h" />
     <ClInclude Include="src\Paperworks\Graphics\Renderer.h" />
     <ClInclude Include="src\Paperworks\Graphics\Shader.h" />
@@ -159,9 +162,11 @@
     <ClInclude Include="src\Paperworks\Layer.h" />
     <ClInclude Include="src\Paperworks\LayerStack.h" />
     <ClInclude Include="src\Paperworks\Log.h" />
+    <ClInclude Include="src\Paperworks\Util\FileIO.h" />
     <ClInclude Include="src\Paperworks\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WinInput.h" />
     <ClInclude Include="src\Platform\Windows\WinWindow.h" />
@@ -534,7 +539,10 @@
   <ItemGroup>
     <ClCompile Include="src\Paperworks\Application.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\API\Buffer.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\API\RenderCmd.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\API\RendererAPI.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\API\VertexArray.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\Camera.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\Renderer.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\Shader.cpp" />
     <ClCompile Include="src\Paperworks\ImGui\ImGuiBuild.cpp" />
@@ -542,8 +550,10 @@
     <ClCompile Include="src\Paperworks\Layer.cpp" />
     <ClCompile Include="src\Paperworks\LayerStack.cpp" />
     <ClCompile Include="src\Paperworks\Log.cpp" />
+    <ClCompile Include="src\Paperworks\Util\FileIO.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WinInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WinWindow.cpp" />

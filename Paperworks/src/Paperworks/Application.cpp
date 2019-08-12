@@ -1,8 +1,13 @@
 #include "pwpch.h"
 #include "Application.h"
 #include "Input.h"
+#include "Util/FileIO.h"
 
-#include <glad/glad.h>
+#include "Paperworks/Graphics/Renderer.h"
+
+#include <glm\ext\matrix_transform.hpp>
+#include <glm\ext\matrix_clip_space.hpp>
+#include <GLFW\glfw3.h>
 
 namespace Paperworks {
 
@@ -11,6 +16,7 @@ namespace Paperworks {
 	Application* Application::s_Instance = nullptr;
 	
 	Application::Application()
+		: m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		PW_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -20,54 +26,66 @@ namespace Paperworks {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
+	/*----------------------------Triangle VBO/VAO---------------------------*/
+		m_VertexArray.reset(VertexArray::Create());
 
-		float vertices[3 * 6] = {
-			 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-			-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+		// Setup Triangle Vertex Buffer Object
+		float vertices[3 * 7] = {
+			 0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
+		std::shared_ptr<VertexBuffer> triVBO;
+		triVBO.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		BufferLayout layout = {
+			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float4, "a_Color"}
+		};
+		triVBO->SetLayout(layout);
+		// Add Triangle Vertex Buffer Object to Vertex Array
+		m_VertexArray->AddVertexBuffer(triVBO);
 
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-		{
-			BufferLayout layout = {
-				{ShaderDataType::Float3, "a_Position"},
-				{ShaderDataType::Float3, "a_Color"}
-			};
-			m_VertexBuffer->SetLayout(layout);
-		}
-
-		m_VertexArray.reset(VertexArray::Create(m_VertexBuffer->GetLayout()));
-
-		// Index buffer
+		// Setup Triangle Index Buffer
 		uint32_t indices[3] = { 0, 1, 2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		std::shared_ptr<IndexBuffer> triIB;
+		triIB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		// Set Index Buffer to Vertex Array
+		m_VertexArray->SetIndexBuffer(triIB);
 
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec3 a_Color;
-			out vec3 outColor;
+	/*-----------------------------Square VBO/VAO----------------------------*/
+		m_SquareVA.reset(VertexArray::Create());
 
-			void main() {
-				gl_Position = vec4(a_Position, 1.0f);
-				outColor = a_Color;
-			}
-		)";
+		// Setup Square Vertex Buffer Object
+		float squareVertices[3 * 4] = {
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f
+		};
+		std::shared_ptr<VertexBuffer> sqrVBO;
+		sqrVBO.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		sqrVBO->SetLayout({
+			{ShaderDataType::Float3, "a_Position"}
+		});
+		// Add Square Vertex Buffer Object to Vertex Array
+		m_SquareVA->AddVertexBuffer(sqrVBO);
 
-		std::string fragmentSrc = R"(
-			#version 330 core
+		// Setup Square Index Buffer
+		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> sqrIB;
+		sqrIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		// Set Index Buffer to Vertex Array
+		m_SquareVA->SetIndexBuffer(sqrIB);
 
-			layout(location = 0) out vec4 color;
-			in vec3 outColor;
+		std::string baseVertSrc = FileIO::ReadFile("Shaders/base.vert");
+		std::string baseFragSrc = FileIO::ReadFile("Shaders/base.frag");
+		
+		m_Shader.reset(new Shader(baseVertSrc, baseFragSrc));
 
-			void main() {
-				color = vec4(outColor, 1.0);
-			}
-		)";
+		std::string blueVertSrc = FileIO::ReadFile("Shaders/blue.vert");
+		std::string blueFragSrc = FileIO::ReadFile("Shaders/blue.frag");
 
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+		m_BlueShader.reset(new Shader(blueVertSrc, blueFragSrc));
 	}
 
 
@@ -78,13 +96,11 @@ namespace Paperworks {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
-		layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -99,26 +115,52 @@ namespace Paperworks {
 		}
 	}
 
+	glm::vec2 cPos = glm::vec2(0, 0);
+	float rot = 0.0f;
+
 	void Application::Run() {
 		while (m_Running)
 		{
-			m_Window->OnUpdate();
+			if (Input::IsKeyPressed(GLFW_KEY_S))
+				cPos.y -= 0.001f;
+			else if (Input::IsKeyPressed(GLFW_KEY_W))
+				cPos.y += 0.001f;
+			if (Input::IsKeyPressed(GLFW_KEY_A))
+				cPos.x -= 0.001f;
+			else if (Input::IsKeyPressed(GLFW_KEY_D))
+				cPos.x += 0.001f;
+			if (Input::IsKeyPressed(GLFW_KEY_Q))
+				rot ++;
+			else if (Input::IsKeyPressed(GLFW_KEY_E))
+				rot --;
+			m_Camera.SetPosition(glm::vec3(cPos, 0.f));
+			m_Camera.SetRotation(rot);
+			RenderCmd::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+			RenderCmd::Clear();
+			RenderCmd::SetViewport(m_Window->GetWidth(), m_Window->GetHeight());
+
+			Renderer::Begin(m_Camera);
+			
+			Renderer::Submit(m_SquareVA, m_BlueShader);
+			Renderer::Submit(m_VertexArray, m_Shader);
+
+			Renderer::End();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
-
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
-			glViewport(0, 0, m_Window.get()->GetWidth(), m_Window.get()->GetHeight());
-			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+			
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
+			
+			m_Window->OnUpdate();
 		}
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

@@ -5,16 +5,9 @@
 
 namespace Paperworks {
 
-	OpenGLVertexArray::OpenGLVertexArray(BufferLayout layout)
+	OpenGLVertexArray::OpenGLVertexArray()
 	{
 		glCreateVertexArrays(1, &m_RendererID);
-		glBindVertexArray(m_RendererID);
-		uint32_t index = 0;
-		for (const auto& element : layout) {
-			glVertexAttribPointer(index, element.GetComponentCount(), ShaderDataToOpenGL(element.Type), element.Normalized, layout.GetStride(), reinterpret_cast<const void*>(element.Offset));
-			glEnableVertexAttribArray(index);
-			index++;
-		}
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
@@ -30,6 +23,32 @@ namespace Paperworks {
 	void OpenGLVertexArray::Unbind() const
 	{
 		glBindVertexArray(0);
+	}
+
+	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	{
+		PW_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
+
+		glBindVertexArray(m_RendererID);
+		vertexBuffer->Bind();
+
+		uint32_t index = 0;
+		const auto& layout = vertexBuffer->GetLayout();
+		for (const auto& element : layout) {
+			glVertexAttribPointer(index, element.GetComponentCount(), ShaderDataToOpenGL(element.Type), element.Normalized, layout.GetStride(), reinterpret_cast<const void*>(element.Offset));
+			glEnableVertexAttribArray(index);
+			index++;
+		}
+
+		m_VertexBuffers.push_back(vertexBuffer);
+	}
+
+	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	{
+		glBindVertexArray(m_RendererID);
+		indexBuffer->Bind();
+
+		m_IndexBuffer = indexBuffer;
 	}
 
 	GLenum OpenGLVertexArray::ShaderDataToOpenGL(ShaderDataType type)

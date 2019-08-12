@@ -9,6 +9,7 @@
 #include "Paperworks/Events/ApplicationEvent.h"
 #include "Paperworks/Graphics/API/Buffer.h"
 #include "Paperworks/Graphics/API/VertexArray.h"
+#include "Paperworks/Graphics/Camera.h"
 
 namespace Paperworks {
 	class Application
@@ -18,6 +19,7 @@ namespace Paperworks {
 		virtual ~Application();
 
 		void Run();
+		void Close();
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
@@ -33,10 +35,13 @@ namespace Paperworks {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		std::unique_ptr<VertexArray> m_VertexArray;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		Camera m_Camera;
+
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+
+		std::shared_ptr<Shader> m_BlueShader;
+		std::shared_ptr<VertexArray> m_SquareVA;
 
 		static Application* s_Instance;
 	};

@@ -84,9 +84,6 @@
     <ClInclude Include="src\Paperworks\Graphics\Context.h">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\Graphics\Renderer.h">
-      <Filter>src\Paperworks\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Paperworks\Graphics\Shader.h">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClInclude>
@@ -1221,6 +1218,12 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\API\RendererAPI.h" />
+    <ClInclude Include="src\Paperworks\Graphics\Renderer.h" />
+    <ClInclude Include="src\Paperworks\Graphics\API\RenderCmd.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\Paperworks\Util\FileIO.h" />
+    <ClInclude Include="src\Paperworks\Graphics\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Paperworks\Application.cpp">
@@ -1231,9 +1234,6 @@
     </ClCompile>
     <ClCompile Include="src\Paperworks\Graphics\API\VertexArray.cpp">
       <Filter>src\Paperworks\Graphics\API</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Paperworks\Graphics\Renderer.cpp">
-      <Filter>src\Paperworks\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Paperworks\Graphics\Shader.cpp">
       <Filter>src\Paperworks\Graphics</Filter>
@@ -1271,5 +1271,11 @@
     <ClCompile Include="src\pwpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\API\RendererAPI.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\API\RenderCmd.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\Paperworks\Util\FileIO.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\Camera.cpp" />
   </ItemGroup>
 </Project>

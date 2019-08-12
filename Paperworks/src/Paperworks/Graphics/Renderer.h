@@ -1,13 +1,27 @@
 #pragma once
 
+#include "API/RenderCmd.h"
+#include "Paperworks\Graphics\Shader.h"
+#include "Paperworks\Graphics\Camera.h"
+
 namespace Paperworks {
-	enum class API {
-		None = 0, OpenGL = 1
-	};
-	class Renderer {
+
+	class Renderer 
+	{
 	public:
-		inline static API GetAPI() { return m_API; }
+		static void Begin();
+		static void Begin(Camera& camera);
+		static void End();
+
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader);
+
+		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
-		static API m_API;
+		struct SceneData {
+			glm::mat4 Projection;
+			glm::mat4 View;
+		};
+
+		static SceneData* s_SceneData;
 	};
 }

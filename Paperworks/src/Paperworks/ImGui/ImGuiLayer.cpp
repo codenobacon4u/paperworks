@@ -82,20 +82,44 @@ namespace Paperworks {
 		}
 	}
 
-	static bool show = true;
+	static bool showDemo = true;
+	static bool showPerform = true;
 	void ImGuiLayer::OnImGuiRender()
 	{
-		if (show)
-			ImGui::ShowDemoWindow(&show);
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("File")) {
+				if (ImGui::BeginMenu("New")) {
+					if (ImGui::MenuItem("GameObject")) PW_CORE_INFO("Created new Game Object!");
+					if (ImGui::MenuItem("Script")) PW_CORE_INFO("Created new Script!");
+					ImGui::EndMenu();
+				}
+				if (ImGui::MenuItem("Exit", "Alt + F4")) Application::Get().Close();
+				ImGui::EndMenu();
+			}
 
-		{
-			ImGui::Begin("Information");                          // Create a window called "Hello, world!" and append into it.
+			if (ImGui::BeginMenu("Edit")) {
+				ImGui::EndMenu();
+			}
 
-			ImGui::Checkbox("Demo Window", &show);      // Edit bools storing our window open/close state
+			if (ImGui::BeginMenu("Tools")) {
+				ImGui::EndMenu();
+			}
 
+			if (ImGui::BeginMenu("View")) {
+				ImGui::MenuItem("Demo ImGui Window", "", &showDemo);
+				ImGui::MenuItem("Performance Window", "", &showPerform);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
+		if (showDemo)
+			ImGui::ShowDemoWindow(&showDemo);
+
+		if (showPerform) {
+			ImGui::Begin("Performance");
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
-
 	}
 }

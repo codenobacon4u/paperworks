@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
+#include <glm\gtc\type_ptr.hpp>
 
 namespace Paperworks {
 
@@ -102,7 +103,7 @@ namespace Paperworks {
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
 
-			PW_CORE_ERROR("{0}", infoLog.data());
+			PW_CORE_ERROR(infoLog.data());
 			PW_CORE_ASSERT(false, "Shader linking failed!");
 
 			return;
@@ -116,6 +117,11 @@ namespace Paperworks {
 	Shader::~Shader()
 	{
 		glDeleteProgram(m_Renderer);
+	}
+
+	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(m_Renderer, name.c_str()), 1, false, glm::value_ptr(matrix));
 	}
 
 	void Shader::Bind() const

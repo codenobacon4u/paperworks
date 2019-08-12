@@ -23,10 +23,10 @@ namespace Paperworks {
 #define PW_CORE_INFO(...)  ::Paperworks::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define PW_CORE_WARN(...)  ::Paperworks::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define PW_CORE_ERROR(...) ::Paperworks::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define PW_CORE_FATAL(...) ::Paperworks::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define PW_CORE_CRITICAL(...) ::Paperworks::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 #define PW_TRACE(...) ::Paperworks::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define PW_INFO(...)  ::Paperworks::Log::GetClientLogger()->info(__VA_ARGS__)
 #define PW_WARN(...)  ::Paperworks::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define PW_ERROR(...) ::Paperworks::Log::GetClientLogger()->error(__VA_ARGS__)
-#define PW_FATAL(...) ::Paperworks::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define PW_CRITICAL(...) ::Paperworks::Log::GetClientLogger()->critical(__VA_ARGS__)

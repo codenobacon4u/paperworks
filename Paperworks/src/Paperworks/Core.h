@@ -2,7 +2,7 @@
 
 #ifdef PW_ENABLE_ASSERTS
 	#define PW_ASSERT(x, ...) { if(!(x)) { PW_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-	#define PW_CORE_ASSERT(x, ...) { if(!(x)) { PW_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define PW_CORE_ASSERT(x, ...) { if(!(x)) { PW_CORE_CRITICAL("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 	#define PW_ASSERT(x, ...)
 	#define PW_CORE_ASSERT(x, ...)
