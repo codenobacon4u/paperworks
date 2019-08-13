@@ -1,12 +1,12 @@
 [submodule "Paperworks/vendor/spdlog"]
 	path = Paperworks/vendor/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "Hazel/vendor/GLFW"]
-	path = Hazel/vendor/GLFW
-	url = https://github.com/glfw/glfw
-[submodule "Paperworks/vendor/ImGui"]
-	path = Paperworks/vendor/ImGui
-	url = https://github.com/ocornut/imgui.git
+	url = https://github.com/gabime/spdlog.git
 [submodule "Paperworks/vendor/glm"]
 	path = Paperworks/vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "Paperworks/vendor/ImGui"]
+	path = Paperworks/vendor/ImGui
+	url = https://github.com/codenobacon4u/imgui.git
+[submodule "Paperworks/vendor/GLFW"]
+	path = Paperworks/vendor/GLFW
+	url = https://github.com/codenobacon4u/glfw.git

@@ -302,6 +302,8 @@
     <ClInclude Include="vendor\glm\glm\ext\scalar_constants.hpp" />
     <ClInclude Include="vendor\glm\glm\ext\scalar_constants.inl" />
     <ClInclude Include="vendor\glm\glm\ext\scalar_int_sized.hpp" />
+    <ClInclude Include="vendor\glm\glm\ext\scalar_integer.hpp" />
+    <ClInclude Include="vendor\glm\glm\ext\scalar_integer.inl" />
     <ClInclude Include="vendor\glm\glm\ext\scalar_relational.hpp" />
     <ClInclude Include="vendor\glm\glm\ext\scalar_relational.inl" />
     <ClInclude Include="vendor\glm\glm\ext\scalar_uint_sized.hpp" />
@@ -341,6 +343,8 @@
     <ClInclude Include="vendor\glm\glm\ext\vector_int3_precision.hpp" />
     <ClInclude Include="vendor\glm\glm\ext\vector_int4.hpp" />
     <ClInclude Include="vendor\glm\glm\ext\vector_int4_precision.hpp" />
+    <ClInclude Include="vendor\glm\glm\ext\vector_integer.hpp" />
+    <ClInclude Include="vendor\glm\glm\ext\vector_integer.inl" />
     <ClInclude Include="vendor\glm\glm\ext\vector_relational.hpp" />
     <ClInclude Include="vendor\glm\glm\ext\vector_relational.inl" />
     <ClInclude Include="vendor\glm\glm\ext\vector_uint1.hpp" />
