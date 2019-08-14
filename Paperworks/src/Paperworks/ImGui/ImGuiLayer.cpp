@@ -84,6 +84,7 @@ namespace Paperworks {
 
 	static bool showDemo = true;
 	static bool showPerform = true;
+	static bool vsync = false;
 	void ImGuiLayer::OnImGuiRender()
 	{
 		if (ImGui::BeginMainMenuBar()) {
@@ -102,6 +103,8 @@ namespace Paperworks {
 			}
 
 			if (ImGui::BeginMenu("Tools")) {
+				ImGui::MenuItem("Enable VSync", "", &vsync);
+				Application::Get().GetWindow().SetVSync(vsync);
 				ImGui::EndMenu();
 			}
 

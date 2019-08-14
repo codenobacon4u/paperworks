@@ -5,11 +5,11 @@
 #include "Paperworks/Application.h"
 #include "Paperworks/Layer.h"
 
-
 #include "Paperworks/KeyCodes.h"
 #include "Paperworks/Input.h"
 #include "Paperworks/Log.h"
 #include "Paperworks/Util/FileIO.h"
+#include "Paperworks/Core/Time.h"
 
 #include "Paperworks/Graphics/Renderer.h"
 #include "Paperworks/Graphics/Context.h"

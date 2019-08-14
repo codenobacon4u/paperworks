@@ -59,8 +59,12 @@ namespace Paperworks {
 	void Application::Run() {
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime(); // Platform::GetTime()
+			Time ts = time - m_LastFrame;
+			m_LastFrame = time;
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(ts);
 			
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

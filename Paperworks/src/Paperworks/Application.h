@@ -10,6 +10,7 @@
 #include "Paperworks/Graphics/API/Buffer.h"
 #include "Paperworks/Graphics/API/VertexArray.h"
 #include "Paperworks/Graphics/Camera.h"
+#include "Paperworks/Core/Time.h"
 
 namespace Paperworks {
 	class Application
@@ -34,6 +35,7 @@ namespace Paperworks {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+		float m_LastFrame = 0.0f;
 
 		static Application* s_Instance;
 	};

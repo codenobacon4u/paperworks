@@ -68,23 +68,23 @@ public:
 		m_BlueShader.reset(new Paperworks::Shader(blueVertSrc, blueFragSrc));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Paperworks::Time ts) override
 	{
 		if (Paperworks::Input::IsKeyPressed(PW_KEY_LEFT))
-			m_CamPos.x -= m_CamMoveSpeed;
+			m_CamPos.x -= m_CamMoveSpeed * ts.DeltaTime();
 		else if (Paperworks::Input::IsKeyPressed(PW_KEY_RIGHT))
-			m_CamPos.x += m_CamMoveSpeed;
+			m_CamPos.x += m_CamMoveSpeed * ts.DeltaTime();
 
 		if (Paperworks::Input::IsKeyPressed(PW_KEY_UP))
-			m_CamPos.y += m_CamMoveSpeed;
+			m_CamPos.y += m_CamMoveSpeed * ts.DeltaTime();
 		else if (Paperworks::Input::IsKeyPressed(PW_KEY_DOWN))
-			m_CamPos.y -= m_CamMoveSpeed;
+			m_CamPos.y -= m_CamMoveSpeed * ts.DeltaTime();
 
 
 		if (Paperworks::Input::IsKeyPressed(PW_KEY_Q))
-			m_CamRot -= m_CamRotSpeed;
+			m_CamRot += m_CamRotSpeed * ts.DeltaTime();
 		else if (Paperworks::Input::IsKeyPressed(PW_KEY_E))
-			m_CamRot += m_CamRotSpeed;
+			m_CamRot -= m_CamRotSpeed * ts.DeltaTime();
 
 		Paperworks::RenderCmd::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Paperworks::RenderCmd::Clear();
@@ -113,10 +113,10 @@ public:
 
 private:
 	glm::vec3 m_CamPos;
-	float m_CamMoveSpeed = 0.1f;
+	float m_CamMoveSpeed = 5.0f;
 
 	float m_CamRot = 0.0f;
-	float m_CamRotSpeed = 2.0f;
+	float m_CamRotSpeed = 180.0f;
 
 	Paperworks::Camera m_Camera;
 

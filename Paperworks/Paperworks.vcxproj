@@ -143,6 +143,7 @@
     <ClInclude Include="src\Paperworks.h" />
     <ClInclude Include="src\Paperworks\Application.h" />
     <ClInclude Include="src\Paperworks\Core.h" />
+    <ClInclude Include="src\Paperworks\Core\Time.h" />
     <ClInclude Include="src\Paperworks\EntryPoint.h" />
     <ClInclude Include="src\Paperworks\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Paperworks\Events\Event.h" />

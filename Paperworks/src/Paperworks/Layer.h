@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Paperworks\Core.h"
-#include "Paperworks\Events\Event.h"
+#include "Paperworks/Core.h"
+#include "Paperworks/Events/Event.h"
+#include "Paperworks/Core/Time.h"
 
 namespace Paperworks {
 
@@ -13,7 +14,7 @@ namespace Paperworks {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Time ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
