@@ -1,10 +1,11 @@
 #include <Paperworks.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 class DebugLayer : public Paperworks::Layer
 {
 public:
 	DebugLayer()
-		: Layer("Debug"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CamPos(0.0f)
+		: Layer("Debug"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CamPos(0.0f), m_SquarePos(0.0f)
 	{
 		/*----------------------------Triangle VBO/VAO---------------------------*/
 		m_VertexArray.reset(Paperworks::VertexArray::Create());
@@ -80,11 +81,21 @@ public:
 		else if (Paperworks::Input::IsKeyPressed(PW_KEY_DOWN))
 			m_CamPos.y -= m_CamMoveSpeed * ts.DeltaTime();
 
-
 		if (Paperworks::Input::IsKeyPressed(PW_KEY_Q))
 			m_CamRot += m_CamRotSpeed * ts.DeltaTime();
 		else if (Paperworks::Input::IsKeyPressed(PW_KEY_E))
 			m_CamRot -= m_CamRotSpeed * ts.DeltaTime();
+
+
+		if (Paperworks::Input::IsKeyPressed(PW_KEY_A))
+			m_SquarePos.x -= m_CamMoveSpeed * ts.DeltaTime();
+		else if (Paperworks::Input::IsKeyPressed(PW_KEY_D))
+			m_SquarePos.x += m_CamMoveSpeed * ts.DeltaTime();
+
+		if (Paperworks::Input::IsKeyPressed(PW_KEY_W))
+			m_SquarePos.y += m_CamMoveSpeed * ts.DeltaTime();
+		else if (Paperworks::Input::IsKeyPressed(PW_KEY_S))
+			m_SquarePos.y -= m_CamMoveSpeed * ts.DeltaTime();
 
 		Paperworks::RenderCmd::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Paperworks::RenderCmd::Clear();
@@ -95,7 +106,7 @@ public:
 
 		Paperworks::Renderer::Begin(m_Camera);
 
-		Paperworks::Renderer::Submit(m_SquareVA, m_BlueShader);
+		Paperworks::Renderer::Submit(m_SquareVA, m_BlueShader, glm::translate(glm::mat4(1.0f), m_SquarePos));
 		Paperworks::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Paperworks::Renderer::End();
@@ -112,6 +123,8 @@ public:
 	}
 
 private:
+	glm::vec3 m_SquarePos;
+
 	glm::vec3 m_CamPos;
 	float m_CamMoveSpeed = 5.0f;
 

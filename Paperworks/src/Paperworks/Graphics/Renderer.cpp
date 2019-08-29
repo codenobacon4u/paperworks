@@ -19,11 +19,12 @@ namespace Paperworks {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader)
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform)
 	{
 		shader->Bind();
 		shader->UploadUniformMat4("u_MVP.proj", s_SceneData->Projection);
 		shader->UploadUniformMat4("u_MVP.view", s_SceneData->View);
+		shader->UploadUniformMat4("u_MVP.modl", transform);
 		vertexArray->Bind();
 		RenderCmd::DrawIndexed(vertexArray);
 	}

@@ -5,6 +5,7 @@ layout(location = 0) in vec3 a_Position;
 struct UBO {
 	mat4 view;
 	mat4 proj;
+	mat4 modl;
 };
 
 uniform UBO u_MVP;
@@ -13,5 +14,5 @@ out vec3 v_Position;
 
 void main() {
 	v_Position = a_Position;
-	gl_Position = u_MVP.proj * u_MVP.view * vec4(a_Position, 1.0f);
+	gl_Position = u_MVP.proj * u_MVP.view * u_MVP.modl * vec4(a_Position, 1.0f);
 }
