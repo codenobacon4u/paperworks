@@ -7,6 +7,9 @@
     <Filter Include="src\Paperworks">
       <UniqueIdentifier>{2A0F44A1-16DD-37A7-FF70-A8CDEBDD130C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Paperworks\Core">
+      <UniqueIdentifier>{C23D976E-2E9F-747C-B70C-BB2E236DAB3B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Paperworks\Events">
       <UniqueIdentifier>{CEC77F76-3A34-3B71-0328-D3CE6F535DD9}</UniqueIdentifier>
     </Filter>
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="src\Paperworks\Core.h">
       <Filter>src\Paperworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\Time.h">
+      <Filter>src\Paperworks\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Paperworks\EntryPoint.h">
       <Filter>src\Paperworks</Filter>
@@ -133,6 +139,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -1251,7 +1260,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\Core\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Paperworks\Application.cpp">
@@ -1303,6 +1311,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">

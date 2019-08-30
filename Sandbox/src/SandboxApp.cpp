@@ -61,12 +61,12 @@ public:
 		std::string baseVertSrc = Paperworks::FileIO::ReadFile("Shaders/base.vert");
 		std::string baseFragSrc = Paperworks::FileIO::ReadFile("Shaders/base.frag");
 
-		m_Shader.reset(new Paperworks::Shader(baseVertSrc, baseFragSrc));
+		m_Shader.reset(Paperworks::Shader::Create(baseVertSrc, baseFragSrc));
 
 		std::string blueVertSrc = Paperworks::FileIO::ReadFile("Shaders/blue.vert");
 		std::string blueFragSrc = Paperworks::FileIO::ReadFile("Shaders/blue.frag");
 
-		m_BlueShader.reset(new Paperworks::Shader(blueVertSrc, blueFragSrc));
+		m_BlueShader.reset(Paperworks::Shader::Create(blueVertSrc, blueFragSrc));
 	}
 
 	void OnUpdate(Paperworks::Time ts) override
