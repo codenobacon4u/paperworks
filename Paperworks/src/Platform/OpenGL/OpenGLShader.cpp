@@ -120,9 +120,46 @@ namespace Paperworks {
 		glDeleteProgram(m_Renderer);
 	}
 
+	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
+	{
+		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float to shader: {0} doesn't exist!", name);
+		glUniform1f(location, value);
+	}
+
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& vec)
+	{
+		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float2 to shader: {0} doesn't exist!", name);
+		glUniform2f(location, vec.x, vec.y);
+	}
+
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& vec)
+	{
+		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float3 to shader: {0} doesn't exist!", name);
+		glUniform3f(location, vec.x, vec.y, vec.z);
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
+	{
+		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float4 to shader: {0} doesn't exist!", name);
+		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+	}
+
+	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+	{
+		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat3 to shader: {0} doesn't exist!", name);
+		glUniformMatrix3fv(location, 1, false, glm::value_ptr(matrix));
+	}
+
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
-		glUniformMatrix4fv(glGetUniformLocation(m_Renderer, name.c_str()), 1, false, glm::value_ptr(matrix));
+		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat4 to shader: {0} doesn't exist!", name);
+		glUniformMatrix4fv(location, 1, false, glm::value_ptr(matrix));
 	}
 
 	void OpenGLShader::Bind() const

@@ -1,5 +1,6 @@
 #include <Paperworks.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <ImGui/imgui.h>
 
 class DebugLayer : public Paperworks::Layer
 {
@@ -38,10 +39,10 @@ public:
 
 		// Setup Square Vertex Buffer Object
 		float squareVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 		std::shared_ptr<Paperworks::VertexBuffer> sqrVBO;
 		sqrVBO.reset(Paperworks::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
@@ -106,15 +107,70 @@ public:
 
 		Paperworks::Renderer::Begin(m_Camera);
 
-		Paperworks::Renderer::Submit(m_SquareVA, m_BlueShader, glm::translate(glm::mat4(1.0f), m_SquarePos));
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		glm::vec3 redColor(0.8f, 0.2f, 0.3f);
+		glm::vec3 blueColor(0.2f, 0.3f, 0.8f);
+
+		for (int y = 0; y < 10; y++)
+			for (int x = 0; x < 10; x++) {
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				if (x % 2 == 0)
+					m_BlueShader->UploadUniformFloat3("u_Color", redColor);
+				else
+					m_BlueShader->UploadUniformFloat3("u_Color", blueColor);
+				Paperworks::Renderer::Submit(m_SquareVA, m_BlueShader, transform);
+			}
 		Paperworks::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Paperworks::Renderer::End();
 	}
 
-	virtual void OnImGuiRender() 
+	
+	virtual void OnImGuiRender()
 	{
+		static bool showDemo = false;
+		static bool showPerform = true;
+		static bool vsync = false;
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("File")) {
+				if (ImGui::BeginMenu("New")) {
+					if (ImGui::MenuItem("GameObject")) PW_CORE_INFO("Created new Game Object!");
+					if (ImGui::MenuItem("Script")) PW_CORE_INFO("Created new Script!");
+					ImGui::EndMenu();
+				}
+				if (ImGui::MenuItem("Exit", "Alt + F4")) Paperworks::Application::Get().Close();
+				ImGui::EndMenu();
+			}
 
+			if (ImGui::BeginMenu("Edit")) {
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Tools")) {
+				ImGui::MenuItem("Enable VSync", "", &vsync);
+				Paperworks::Application::Get().GetWindow().SetVSync(vsync);
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("View")) {
+				if (ImGui::MenuItem("Reset Camera")) m_CamPos = glm::vec3(0.0f);
+				ImGui::MenuItem("Demo ImGui Window", "", &showDemo);
+				ImGui::MenuItem("Performance Window", "", &showPerform);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
+		if (showDemo)
+			ImGui::ShowDemoWindow(&showDemo);
+
+		if (showPerform) {
+			ImGui::Begin("Performance");
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
+		}
 	}
 
 	void OnEvent(Paperworks::Event& event) override

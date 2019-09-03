@@ -14,6 +14,8 @@ namespace Paperworks {
 	public:
 		virtual ~Shader() {}
 
+		virtual void UploadUniformFloat4(const std::string& name, const glm::vec4& vec) = 0;
+		virtual void UploadUniformFloat3(const std::string& name, const glm::vec3& vec) = 0;
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;
 
 		virtual void Bind() const = 0;
