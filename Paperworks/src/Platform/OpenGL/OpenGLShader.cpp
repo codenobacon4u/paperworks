@@ -1,88 +1,162 @@
 #include "pwpch.h"
 
 #include "OpenGLShader.h"
+#include "Paperworks/Util/FileIO.h"
 
-#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Paperworks {
+	static GLenum ShaderTypeFromString(const std::string& type)
+	{
+		if (type == "vertex")
+			return GL_VERTEX_SHADER;
+
+		if (type == "fragment" || type == "pixel")
+			return GL_FRAGMENT_SHADER;
+
+		if (type == "geometry")
+			return GL_GEOMETRY_SHADER;
+
+		PW_CORE_ASSERT(false, "Unknown shader type!");
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& path)
+		: m_RendererID(0)
+	{
+		std::string source = FileIO::ReadFile(path);
+		auto shaders = PreProcess(source);
+		Compile(shaders);
+	}
 
 	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
-		: m_Renderer(0)
+		: m_RendererID(0)
 	{
-		// Create an empty vertex shader handle
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		std::unordered_map<GLenum, std::string> shaders;
 
-		// Send the vertex shader source code to GL
-		// Note that std::string's .c_str is NULL character terminated.
-		const GLchar* source = (const GLchar*)vertexSource.c_str();
-		glShaderSource(vertexShader, 1, &source, 0);
+		shaders[GL_VERTEX_SHADER] = vertexSource;
+		shaders[GL_FRAGMENT_SHADER] = fragmentSource;
+		Compile(shaders);
+	}
 
-		// Compile the vertex shader
-		glCompileShader(vertexShader);
+	OpenGLShader::~OpenGLShader()
+	{
+		glDeleteProgram(m_RendererID);
+	}
 
-		GLint isCompiled = 0;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
+	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float to shader: {0} doesn't exist!", name);
+		glUniform1f(location, value);
+	}
 
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& vec)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float2 to shader: {0} doesn't exist!", name);
+		glUniform2f(location, vec.x, vec.y);
+	}
 
-			// We don't need the shader anymore.
-			glDeleteShader(vertexShader);
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& vec)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float3 to shader: {0} doesn't exist!", name);
+		glUniform3f(location, vec.x, vec.y, vec.z);
+	}
 
-			PW_CORE_ERROR("{0}", infoLog.data());
-			PW_CORE_ASSERT(false, "Vertex shader compiliation failed!");
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float4 to shader: {0} doesn't exist!", name);
+		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+	}
 
-			return;
+	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat3 to shader: {0} doesn't exist!", name);
+		glUniformMatrix3fv(location, 1, false, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat4 to shader: {0} doesn't exist!", name);
+		glUniformMatrix4fv(location, 1, false, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::Bind() const
+	{
+		glUseProgram(m_RendererID);
+	}
+
+	void OpenGLShader::Unbind() const
+	{
+		glUseProgram(0);
+	}
+
+	std::unordered_map<GLenum, std::string>& OpenGLShader::PreProcess(const std::string& src)
+	{
+		std::unordered_map<GLenum, std::string> shaderMap;
+
+		const char* typeIndicator = "#type";
+		size_t typeLength = strlen(typeIndicator);
+		size_t pos = src.find(typeIndicator);
+		while (pos != std::string::npos) {
+			size_t eol = src.find_first_of("\r\n", pos);
+			PW_CORE_ASSERT(eol != std::string::npos, "Syntax Error!");
+			size_t shaderBegin = pos + typeLength + 1;
+			std::string shaderType = src.substr(shaderBegin, eol - shaderBegin);
+			PW_CORE_ASSERT(shaderType == "vertex", shaderType == "fragment", shaderType == "geometry");
+
+			size_t nextLinePos = src.find_first_not_of("\r\n", eol);
+			pos = src.find(typeIndicator, nextLinePos);
+			shaderMap[ShaderTypeFromString(shaderType)] = src.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? src.size() - 1 : nextLinePos));
 		}
 
-		// Create an empty fragment shader handle
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		return shaderMap;
+	}
 
-		// Send the fragment shader source code to GL
-		// Note that std::string's .c_str is NULL character terminated.
-		source = (const GLchar*)fragmentSource.c_str();
-		glShaderSource(fragmentShader, 1, &source, 0);
+	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaders)
+	{
+		GLuint program = glCreateProgram();
+		std::vector<GLenum> glShaderIDs(shaders.size());
+		for (auto& key : shaders) {
+			GLenum type = key.first;
+			const std::string& source = key.second;
 
-		// Compile the fragment shader
-		glCompileShader(fragmentShader);
+			GLuint shader = glCreateShader(type);
+			const GLchar* shaderSrc = (const GLchar*)source.c_str();
 
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
+			glShaderSource(shader, 1, &shaderSrc, 0);
 
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
+			// Compile the vertex shader
+			glCompileShader(shader);
 
-			// We don't need the shader anymore.
-			glDeleteShader(fragmentShader);
-			// Either of them. Don't leak shaders.
-			glDeleteShader(vertexShader);
+			GLint isCompiled = 0;
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+			if (isCompiled == GL_FALSE)
+			{
+				GLint maxLength = 0;
+				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
 
-			PW_CORE_ERROR("{0}", infoLog.data());
-			PW_CORE_ASSERT(false, "Fragment shader compiliation failed!");
+				// The maxLength includes the NULL character
+				std::vector<GLchar> infoLog(maxLength);
+				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
 
-			return;
+				// We don't need the shader anymore.
+				glDeleteShader(shader);
+
+				PW_CORE_ERROR("{0}", infoLog.data());
+				PW_CORE_ASSERT(false, "Shader compiliation failed!");
+
+				break;
+			}
+
+			// Attach our shaders to our program
+			glAttachShader(program, shader);
+			glShaderIDs.push_back(shader);
 		}
-
-		// Vertex and fragment shaders are successfully compiled.
-		// Now time to link them together into a program.
-		// Get a program object.
-		m_Renderer = glCreateProgram();
-		GLuint program = m_Renderer;
-
-		// Attach our shaders to our program
-		glAttachShader(program, vertexShader);
-		glAttachShader(program, fragmentShader);
-
 		// Link our program
 		glLinkProgram(program);
 
@@ -101,8 +175,9 @@ namespace Paperworks {
 			// We don't need the program anymore.
 			glDeleteProgram(program);
 			// Don't leak shaders either.
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
+			for (auto shader : glShaderIDs) {
+				glDeleteShader(shader);
+			}
 
 			PW_CORE_ERROR(infoLog.data());
 			PW_CORE_ASSERT(false, "Shader linking failed!");
@@ -111,64 +186,10 @@ namespace Paperworks {
 		}
 
 		// Always detach shaders after a successful link.
-		glDetachShader(program, vertexShader);
-		glDetachShader(program, fragmentShader);
-	}
+		for (auto shader : glShaderIDs) {
+			glDetachShader(program, shader);
+		}
 
-	OpenGLShader::~OpenGLShader()
-	{
-		glDeleteProgram(m_Renderer);
-	}
-
-	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
-	{
-		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform float to shader: {0} doesn't exist!", name);
-		glUniform1f(location, value);
-	}
-
-	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& vec)
-	{
-		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform float2 to shader: {0} doesn't exist!", name);
-		glUniform2f(location, vec.x, vec.y);
-	}
-
-	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& vec)
-	{
-		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform float3 to shader: {0} doesn't exist!", name);
-		glUniform3f(location, vec.x, vec.y, vec.z);
-	}
-
-	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
-	{
-		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform float4 to shader: {0} doesn't exist!", name);
-		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
-	}
-
-	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
-	{
-		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat3 to shader: {0} doesn't exist!", name);
-		glUniformMatrix3fv(location, 1, false, glm::value_ptr(matrix));
-	}
-
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
-	{
-		GLint location = glGetUniformLocation(m_Renderer, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat4 to shader: {0} doesn't exist!", name);
-		glUniformMatrix4fv(location, 1, false, glm::value_ptr(matrix));
-	}
-
-	void OpenGLShader::Bind() const
-	{
-		glUseProgram(m_Renderer);
-	}
-
-	void OpenGLShader::Unbind() const
-	{
-		glUseProgram(0);
+		m_RendererID = program;
 	}
 }

@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Paperworks/Graphics/Shader.h"
+#include <glad/glad.h>
 
 namespace Paperworks {
 	class OpenGLShader : public Shader {
 	public:
+		OpenGLShader(const std::string& path);
 		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
 		~OpenGLShader();
 
@@ -19,6 +21,9 @@ namespace Paperworks {
 		void Bind() const;
 		void Unbind() const;
 	private:
-		uint32_t m_Renderer;
+		std::unordered_map<GLenum, std::string>& PreProcess(const std::string& src);
+		void Compile(const std::unordered_map<GLenum, std::string>& shaders);
+	private:
+		uint32_t m_RendererID;
 	};
 }
