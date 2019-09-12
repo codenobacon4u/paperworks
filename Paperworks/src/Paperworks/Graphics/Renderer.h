@@ -1,8 +1,8 @@
 #pragma once
 
 #include "API/RenderCmd.h"
-#include "Paperworks\Graphics\Shader.h"
-#include "Paperworks\Graphics\Camera.h"
+#include "Paperworks/Graphics/Shader.h"
+#include "Paperworks/Graphics/Camera.h"
 
 namespace Paperworks {
 

@@ -28,8 +28,10 @@ namespace Paperworks {
 			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(KeyPressed)
+		static EventType GetStaticType() { return EventType::KeyPressed; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return "KeyPressed"; }
+		//EVENT_CLASS_TYPE(KeyPressed);
 	private:
 		int m_RepeatCount;
 	};
@@ -45,8 +47,10 @@ namespace Paperworks {
 			ss << "KeyReleasedEvent: " << m_KeyCode;
 			return ss.str();
 		}
-
-		EVENT_CLASS_TYPE(KeyReleased);
+		static EventType GetStaticType() { return EventType::KeyReleased; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return "KeyReleased"; }
+		//EVENT_CLASS_TYPE(KeyReleased);
 	};
 
 	class KeyTypedEvent : public KeyEvent
@@ -61,6 +65,9 @@ namespace Paperworks {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyTyped);
+		static EventType GetStaticType() { return EventType::KeyTyped; }
+		virtual EventType GetEventType() const override { return GetStaticType(); }
+		virtual const char* GetName() const override { return "KeyTyped"; }
+		//EVENT_CLASS_TYPE(KeyTyped);
 	};
 }

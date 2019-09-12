@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Paperworks\Core.h"
+#include "Paperworks/Core.h"
 #include "Layer.h"
 
 #include <vector>

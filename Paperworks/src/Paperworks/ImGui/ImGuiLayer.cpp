@@ -2,13 +2,13 @@
 #include "ImGuiLayer.h"
 
 #include "imgui.h"
-#include "examples\imgui_impl_glfw.h"
-#include "examples\imgui_impl_opengl3.h"
+#include "examples/imgui_impl_glfw.h"
+#include "examples/imgui_impl_opengl3.h"
 
-#include "Paperworks\Application.h"
+#include "Paperworks/Application.h"
 
-#include <GLFW\glfw3.h>
-#include <glad\glad.h>
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Paperworks {
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")

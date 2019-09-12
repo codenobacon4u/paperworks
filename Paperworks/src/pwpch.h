@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Paperworks\Log.h"
+#include "Paperworks/Log.h"
 
 #ifdef PW_PLATFORM_WINDOWS
 	#include <Windows.h>

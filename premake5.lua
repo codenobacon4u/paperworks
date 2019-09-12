@@ -8,6 +8,10 @@ configurations {
     "Dist"
 }
 
+flags {
+    "MultiProcessorCompile"
+}
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 --Include directories relative to root folder (solution directory)
@@ -62,12 +66,33 @@ links {
     "GLFW",
     "GLAD",
     "ImGui",
-    "opengl32.lib"
+}
+
+filter "system:linux"
+pic "on"
+
+links {
+    "Xrandr",
+    "Xi",
+    "GLEW",
+    "GLU",
+    "GL",
+    "X11"
+}
+
+defines {
+    "PW_PLATFORM_LINUX",
+    "PW_BUILD_DLL",
+    "GLFW_INCLUDE_NONE"
 }
 
 filter "system:windows"
 systemversion "latest"
 toolset "v142"
+
+links {
+    "opengl32.lib"
+}
 
 defines {
     "PW_BUILD_DLL",
@@ -115,6 +140,24 @@ includedirs {
 
 links {
     "Paperworks"
+}
+
+filter "system:linux"
+
+links {
+    "GLFW",
+    "GLAD",
+    "ImGui",
+    "GLEW",
+    "GLU",
+    "GL",
+    "X11",
+    "dl",
+    "pthread"
+}
+
+defines {
+    "PW_PLATOFRM_LINUX"
 }
 
 filter "system:windows"

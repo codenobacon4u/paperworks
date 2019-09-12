@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Paperworks\Window.h"
+#include "Paperworks/Window.h"
 
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 
 #include "Paperworks/Graphics/Context.h"
 
