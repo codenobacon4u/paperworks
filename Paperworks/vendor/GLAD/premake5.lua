@@ -18,7 +18,6 @@ includedirs {
 
 filter "system:windows"
 systemversion "latest"
-toolset "v142"
 
 filter "configurations:Debug"
 runtime "Debug"

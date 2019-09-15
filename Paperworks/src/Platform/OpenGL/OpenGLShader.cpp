@@ -3,6 +3,7 @@
 #include "OpenGLShader.h"
 #include "Paperworks/Util/FileIO.h"
 
+#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Paperworks {
@@ -18,6 +19,7 @@ namespace Paperworks {
 			return GL_GEOMETRY_SHADER;
 
 		PW_CORE_ASSERT(false, "Unknown shader type!");
+		return 0;
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& path)
@@ -43,6 +45,13 @@ namespace Paperworks {
 		glDeleteProgram(m_RendererID);
 	}
 
+	void OpenGLShader::UploadUniformInt(const std::string& name, int value)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform float to shader: {0} doesn't exist!", name);
+		glUniform1i(location, value);
+	}
+	
 	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
@@ -95,7 +104,7 @@ namespace Paperworks {
 		glUseProgram(0);
 	}
 
-	std::unordered_map<GLenum, std::string>& OpenGLShader::PreProcess(const std::string& src)
+	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& src)
 	{
 		std::unordered_map<GLenum, std::string> shaderMap;
 

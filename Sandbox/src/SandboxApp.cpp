@@ -2,6 +2,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <ImGui/imgui.h>
 
+#include <Platform/OpenGL/OpenGLShader.h>
+#include <glm\glm\gtc\type_ptr.hpp>
+
 class DebugLayer : public Paperworks::Layer
 {
 public:
@@ -9,7 +12,7 @@ public:
 		: Layer("Debug"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CamPos(0.0f), m_SquarePos(0.0f)
 	{
 		/*----------------------------Triangle VBO/VAO---------------------------*/
-		m_VertexArray.reset(Paperworks::VertexArray::Create());
+		m_TriangleVA.reset(Paperworks::VertexArray::Create());
 
 		// Setup Triangle Vertex Buffer Object
 		float vertices[3 * 7] = {
@@ -25,29 +28,30 @@ public:
 		};
 		triVBO->SetLayout(layout);
 		// Add Triangle Vertex Buffer Object to Vertex Array
-		m_VertexArray->AddVertexBuffer(triVBO);
+		m_TriangleVA->AddVertexBuffer(triVBO);
 
 		// Setup Triangle Index Buffer
 		uint32_t indices[3] = { 0, 1, 2 };
 		std::shared_ptr<Paperworks::IndexBuffer> triIB;
 		triIB.reset(Paperworks::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		// Set Index Buffer to Vertex Array
-		m_VertexArray->SetIndexBuffer(triIB);
+		m_TriangleVA->SetIndexBuffer(triIB);
 
 		/*-----------------------------Square VBO/VAO----------------------------*/
 		m_SquareVA.reset(Paperworks::VertexArray::Create());
 
 		// Setup Square Vertex Buffer Object
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[4 * 5] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		std::shared_ptr<Paperworks::VertexBuffer> sqrVBO;
 		sqrVBO.reset(Paperworks::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		sqrVBO->SetLayout({
-			{Paperworks::ShaderDataType::Float3, "a_Position"}
+			{Paperworks::ShaderDataType::Float3, "a_Position"},
+			{Paperworks::ShaderDataType::Float2, "a_TexCoord"}
 		});
 		// Add Square Vertex Buffer Object to Vertex Array
 		m_SquareVA->AddVertexBuffer(sqrVBO);
@@ -59,15 +63,22 @@ public:
 		// Set Index Buffer to Vertex Array
 		m_SquareVA->SetIndexBuffer(sqrIB);
 
-		std::string baseVertSrc = Paperworks::FileIO::ReadFile("Shaders/base.vert");
-		std::string baseFragSrc = Paperworks::FileIO::ReadFile("Shaders/base.frag");
+		std::string baseVertSrc = Paperworks::FileIO::ReadFile("assets/shaders/base.vert");
+		std::string baseFragSrc = Paperworks::FileIO::ReadFile("assets/shaders/base.frag");
 
 		m_Shader.reset(Paperworks::Shader::Create(baseVertSrc, baseFragSrc));
 
-		std::string blueVertSrc = Paperworks::FileIO::ReadFile("Shaders/blue.vert");
-		std::string blueFragSrc = Paperworks::FileIO::ReadFile("Shaders/blue.frag");
+		std::string blueVertSrc = Paperworks::FileIO::ReadFile("assets/shaders/blue.vert");
+		std::string blueFragSrc = Paperworks::FileIO::ReadFile("assets/shaders/blue.frag");
 
 		m_BlueShader.reset(Paperworks::Shader::Create(blueVertSrc, blueFragSrc));
+
+		m_TextureShader.reset(Paperworks::Shader::Create("assets/shaders/textured.glsl"));
+
+		m_SlimeTexture = Paperworks::Texture2D::Create("assets/textures/slime.png");
+
+		std::dynamic_pointer_cast<Paperworks::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Paperworks::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Paperworks::Time ts) override
@@ -109,20 +120,20 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		glm::vec3 redColor(0.8f, 0.2f, 0.3f);
-		glm::vec3 blueColor(0.2f, 0.3f, 0.8f);
-
-		for (int y = 0; y < 10; y++)
+		m_BlueShader->Bind();
+		m_BlueShader->UploadUniformFloat3("u_Color", m_SquareColor);
+		for (int y = 0; y < 10; y++) {
 			for (int x = 0; x < 10; x++) {
 				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				if (x % 2 == 0)
-					m_BlueShader->UploadUniformFloat3("u_Color", redColor);
-				else
-					m_BlueShader->UploadUniformFloat3("u_Color", blueColor);
 				Paperworks::Renderer::Submit(m_SquareVA, m_BlueShader, transform);
 			}
-		Paperworks::Renderer::Submit(m_VertexArray, m_Shader);
+		}
+
+		m_SlimeTexture->Bind();
+		Paperworks::Renderer::Submit(m_SquareVA, m_TextureShader, glm::translate(glm::mat4(1.0f), glm::vec3(m_SquarePos.x, m_SquarePos.y, 1.0f)));
+		
+		Paperworks::Renderer::Submit(m_TriangleVA, m_Shader);
 
 		Paperworks::Renderer::End();
 	}
@@ -131,6 +142,7 @@ public:
 	virtual void OnImGuiRender()
 	{
 		static bool showDemo = false;
+		static bool showColor = false;
 		static bool showPerform = true;
 		static bool vsync = false;
 		if (ImGui::BeginMainMenuBar()) {
@@ -145,6 +157,7 @@ public:
 			}
 
 			if (ImGui::BeginMenu("Edit")) {
+				ImGui::MenuItem("Color Shader", "", &showColor);
 				ImGui::EndMenu();
 			}
 
@@ -171,6 +184,12 @@ public:
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
 		}
+
+		if (showColor) {
+			ImGui::Begin("Color Shader Settings");
+			ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+			ImGui::End();
+		}
 	}
 
 	void OnEvent(Paperworks::Event& event) override
@@ -187,12 +206,17 @@ private:
 	float m_CamRot = 0.0f;
 	float m_CamRotSpeed = 180.0f;
 
+	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
+
 	Paperworks::Camera m_Camera;
 
-	std::shared_ptr<Paperworks::Shader> m_Shader;
-	std::shared_ptr<Paperworks::VertexArray> m_VertexArray;
+	std::shared_ptr<Paperworks::Texture2D> m_SlimeTexture;
 
+	std::shared_ptr<Paperworks::Shader> m_Shader;
 	std::shared_ptr<Paperworks::Shader> m_BlueShader;
+	std::shared_ptr<Paperworks::Shader> m_TextureShader;
+
+	std::shared_ptr<Paperworks::VertexArray> m_TriangleVA;
 	std::shared_ptr<Paperworks::VertexArray> m_SquareVA;
 };
 
