@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pwpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PW_BUILD_DLL;PW_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PW_DEBUG;PW_ASSERT_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PW_BUILD_DLL;GLFW_INCLUDE_NONE;PW_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -98,7 +98,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pwpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PW_BUILD_DLL;PW_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PW_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PW_BUILD_DLL;GLFW_INCLUDE_NONE;PW_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pwpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PW_BUILD_DLL;PW_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PW_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PW_BUILD_DLL;GLFW_INCLUDE_NONE;PW_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\ImGui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -145,10 +145,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Paperworks.h" />
-    <ClInclude Include="src\Paperworks\Application.h" />
-    <ClInclude Include="src\Paperworks\Core.h" />
+    <ClInclude Include="src\Paperworks\Core\Application.h" />
+    <ClInclude Include="src\Paperworks\Core\Core.h" />
+    <ClInclude Include="src\Paperworks\Core\EntryPoint.h" />
+    <ClInclude Include="src\Paperworks\Core\Input.h" />
+    <ClInclude Include="src\Paperworks\Core\KeyCodes.h" />
+    <ClInclude Include="src\Paperworks\Core\Layer.h" />
+    <ClInclude Include="src\Paperworks\Core\LayerStack.h" />
+    <ClInclude Include="src\Paperworks\Core\Log.h" />
     <ClInclude Include="src\Paperworks\Core\Time.h" />
-    <ClInclude Include="src\Paperworks\EntryPoint.h" />
+    <ClInclude Include="src\Paperworks\Core\Window.h" />
     <ClInclude Include="src\Paperworks\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Paperworks\Events\Event.h" />
     <ClInclude Include="src\Paperworks\Events\KeyEvent.h" />
@@ -158,18 +164,14 @@
     <ClInclude Include="src\Paperworks\Graphics\API\RendererAPI.h" />
     <ClInclude Include="src\Paperworks\Graphics\API\VertexArray.h" />
     <ClInclude Include="src\Paperworks\Graphics\Camera.h" />
+    <ClInclude Include="src\Paperworks\Graphics\CameraController.h" />
     <ClInclude Include="src\Paperworks\Graphics\Context.h" />
     <ClInclude Include="src\Paperworks\Graphics\Renderer.h" />
+    <ClInclude Include="src\Paperworks\Graphics\Renderer2D.h" />
     <ClInclude Include="src\Paperworks\Graphics\Shader.h" />
     <ClInclude Include="src\Paperworks\Graphics\Texture.h" />
     <ClInclude Include="src\Paperworks\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Paperworks\Input.h" />
-    <ClInclude Include="src\Paperworks\KeyCodes.h" />
-    <ClInclude Include="src\Paperworks\Layer.h" />
-    <ClInclude Include="src\Paperworks\LayerStack.h" />
-    <ClInclude Include="src\Paperworks\Log.h" />
     <ClInclude Include="src\Paperworks\Util\FileIO.h" />
-    <ClInclude Include="src\Paperworks\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
@@ -550,20 +552,22 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Paperworks\Application.cpp" />
+    <ClCompile Include="src\Paperworks\Core\Application.cpp" />
+    <ClCompile Include="src\Paperworks\Core\Layer.cpp" />
+    <ClCompile Include="src\Paperworks\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Paperworks\Core\Log.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\API\Buffer.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\API\RenderCmd.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\API\RendererAPI.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\API\VertexArray.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\Camera.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\CameraController.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Paperworks\Graphics\Renderer2D.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\Shader.cpp" />
     <ClCompile Include="src\Paperworks\Graphics\Texture.cpp" />
     <ClCompile Include="src\Paperworks\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Paperworks\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Paperworks\Layer.cpp" />
-    <ClCompile Include="src\Paperworks\LayerStack.cpp" />
-    <ClCompile Include="src\Paperworks\Log.cpp" />
     <ClCompile Include="src\Paperworks\Util\FileIO.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />

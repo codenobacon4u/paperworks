@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Paperworks/Window.h"
+#include "Paperworks/Core/Window.h"
 
 #include <GLFW/glfw3.h>
 

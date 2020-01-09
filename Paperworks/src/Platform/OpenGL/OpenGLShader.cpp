@@ -45,49 +45,49 @@ namespace Paperworks {
 		glDeleteProgram(m_RendererID);
 	}
 
-	void OpenGLShader::UploadUniformInt(const std::string& name, int value)
+	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
-		if (location == -1) PW_CORE_ERROR("Error uploading uniform float to shader: {0} doesn't exist!", name);
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform int to shader: {0} doesn't exist!", name);
 		glUniform1i(location, value);
 	}
 	
-	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
+	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform float to shader: {0} doesn't exist!", name);
 		glUniform1f(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& vec)
+	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& vec)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform float2 to shader: {0} doesn't exist!", name);
 		glUniform2f(location, vec.x, vec.y);
 	}
 
-	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& vec)
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& vec)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform float3 to shader: {0} doesn't exist!", name);
 		glUniform3f(location, vec.x, vec.y, vec.z);
 	}
 
-	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& vec)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform float4 to shader: {0} doesn't exist!", name);
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 	}
 
-	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+	void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& matrix)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat3 to shader: {0} doesn't exist!", name);
 		glUniformMatrix3fv(location, 1, false, glm::value_ptr(matrix));
 	}
 
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform mat4 to shader: {0} doesn't exist!", name);
@@ -116,11 +116,13 @@ namespace Paperworks {
 			PW_CORE_ASSERT(eol != std::string::npos, "Syntax Error!");
 			size_t shaderBegin = pos + typeLength + 1;
 			std::string shaderType = src.substr(shaderBegin, eol - shaderBegin);
-			PW_CORE_ASSERT(shaderType == "vertex", shaderType == "fragment", shaderType == "geometry");
+			PW_CORE_ASSERT(ShaderTypeFromString(shaderType), "Ivalid shader type specified");
 
 			size_t nextLinePos = src.find_first_not_of("\r\n", eol);
+			PW_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
 			pos = src.find(typeIndicator, nextLinePos);
-			shaderMap[ShaderTypeFromString(shaderType)] = src.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? src.size() - 1 : nextLinePos));
+
+			shaderMap[ShaderTypeFromString(shaderType)] = (pos == std::string::npos) ? src.substr(nextLinePos) : src.substr(nextLinePos, pos - nextLinePos);
 		}
 
 		return shaderMap;
@@ -129,13 +131,14 @@ namespace Paperworks {
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaders)
 	{
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaders.size());
+		std::array<GLenum, 2> glShaderIDs;
+		int i = 0;
 		for (auto& key : shaders) {
 			GLenum type = key.first;
 			const std::string& source = key.second;
 
 			GLuint shader = glCreateShader(type);
-			const GLchar* shaderSrc = (const GLchar*)source.c_str();
+			const GLchar* shaderSrc = source.c_str();
 
 			glShaderSource(shader, 1, &shaderSrc, 0);
 
@@ -164,14 +167,17 @@ namespace Paperworks {
 
 			// Attach our shaders to our program
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[i++] = shader;
 		}
+
+		m_RendererID = program;
+
 		// Link our program
 		glLinkProgram(program);
 
 		// Note the different functions here: glGetProgram* instead of glGetShader*.
 		GLint isLinked = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, (int*)& isLinked);
+		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
 		if (isLinked == GL_FALSE)
 		{
 			GLint maxLength = 0;
@@ -188,7 +194,7 @@ namespace Paperworks {
 				glDeleteShader(shader);
 			}
 
-			PW_CORE_ERROR(infoLog.data());
+			PW_CORE_ERROR("{0}", infoLog.data());
 			PW_CORE_ASSERT(false, "Shader linking failed!");
 
 			return;
@@ -197,8 +203,7 @@ namespace Paperworks {
 		// Always detach shaders after a successful link.
 		for (auto shader : glShaderIDs) {
 			glDetachShader(program, shader);
+			glDeleteShader(shader);
 		}
-
-		m_RendererID = program;
 	}
 }

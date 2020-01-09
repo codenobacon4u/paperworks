@@ -11,14 +11,15 @@ namespace Paperworks {
 		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
 		~OpenGLShader();
 
-		void UploadUniformInt(const std::string& name, int value);
-		void UploadUniformFloat(const std::string& name, float value);
-		void UploadUniformFloat2(const std::string& name, const glm::vec2& vec);
-		void UploadUniformFloat3(const std::string& name, const glm::vec3& vec);
-		void UploadUniformFloat4(const std::string& name, const glm::vec4& vec);
+		virtual void SetInt(const std::string& name, int value) override;
 
-		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
-		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+		virtual void SetFloat(const std::string& name, float value) override;
+		virtual void SetFloat2(const std::string& name, const glm::vec2& vec) override;
+		virtual void SetFloat3(const std::string& name, const glm::vec3& vec) override;
+		virtual void SetFloat4(const std::string& name, const glm::vec4& vec) override;
+		
+		virtual void SetMat3(const std::string& name, const glm::mat3& matrix) override;
+		virtual void SetMat4(const std::string& name, const glm::mat4& matrix) override;
 
 		void Bind() const;
 		void Unbind() const;

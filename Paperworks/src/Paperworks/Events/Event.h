@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pwpch.h"
-#include "Paperworks/Core.h"
+#include "Paperworks/Core/Core.h"
 
 namespace Paperworks {
 	enum class EventType

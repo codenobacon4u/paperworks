@@ -1,7 +1,7 @@
 #include "pwpch.h"
 #include "WinInput.h"
 
-#include "Paperworks/Application.h"
+#include "Paperworks/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Paperworks {

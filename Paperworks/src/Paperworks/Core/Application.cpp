@@ -1,17 +1,14 @@
 #include "pwpch.h"
 #include "Application.h"
-#include "Input.h"
-#include "Util/FileIO.h"
 
+#include "Input.h"
+
+#include "Paperworks/Util/FileIO.h"
 #include "Paperworks/Graphics/Renderer.h"
 
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/matrix_clip_space.hpp>
 #include <GLFW/glfw3.h>
 
 namespace Paperworks {
-
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
 	
@@ -19,8 +16,10 @@ namespace Paperworks {
 	{
 		PW_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		m_Window = Window::Create();
+		m_Window->SetEventCallback(PW_BIND_EVENT_FN(Application::OnEvent));
+
+		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -29,32 +28,33 @@ namespace Paperworks {
 
 	Application::~Application()
 	{
+		Renderer::Shutdown();
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(PW_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(PW_BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
-			(*--it)->OnEvent(e);
+			(*it)->OnEvent(e);
 			if (e.Handled) break;
 		}
 	}
-
-	glm::vec2 cPos = glm::vec2(0, 0);
-	float rot = 0.0f;
 
 	void Application::Run() {
 		while (m_Running)
@@ -63,8 +63,9 @@ namespace Paperworks {
 			Time ts = time - m_LastFrame;
 			m_LastFrame = time;
 
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(ts);
+			if (!m_Minimized)
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(ts);
 			
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
@@ -75,8 +76,7 @@ namespace Paperworks {
 		}
 	}
 
-	void Application::Close()
-	{
+	void Application::Close() {
 		m_Running = false;
 	}
 
@@ -84,5 +84,16 @@ namespace Paperworks {
 	{
 		m_Running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+			m_Minimized = true;
+			return true;
+		}
+		m_Minimized = false;
+		Renderer::WindowResized(e.GetWidth(), e.GetHeight());
+		return false;
 	}
 }

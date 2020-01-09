@@ -63,17 +63,35 @@
     <ClInclude Include="src\Paperworks.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\Application.h">
-      <Filter>src\Paperworks</Filter>
+    <ClInclude Include="src\Paperworks\Core\Application.h">
+      <Filter>src\Paperworks\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\Core.h">
-      <Filter>src\Paperworks</Filter>
+    <ClInclude Include="src\Paperworks\Core\Core.h">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\EntryPoint.h">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\Input.h">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\KeyCodes.h">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\Layer.h">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\LayerStack.h">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Core\Log.h">
+      <Filter>src\Paperworks\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Paperworks\Core\Time.h">
       <Filter>src\Paperworks\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\EntryPoint.h">
-      <Filter>src\Paperworks</Filter>
+    <ClInclude Include="src\Paperworks\Core\Window.h">
+      <Filter>src\Paperworks\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Paperworks\Events\ApplicationEvent.h">
       <Filter>src\Paperworks\Events</Filter>
@@ -102,10 +120,16 @@
     <ClInclude Include="src\Paperworks\Graphics\Camera.h">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\CameraController.h">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Paperworks\Graphics\Context.h">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Paperworks\Graphics\Renderer.h">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Paperworks\Graphics\Renderer2D.h">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Paperworks\Graphics\Shader.h">
@@ -117,26 +141,8 @@
     <ClInclude Include="src\Paperworks\ImGui\ImGuiLayer.h">
       <Filter>src\Paperworks\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Paperworks\Input.h">
-      <Filter>src\Paperworks</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Paperworks\KeyCodes.h">
-      <Filter>src\Paperworks</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Paperworks\Layer.h">
-      <Filter>src\Paperworks</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Paperworks\LayerStack.h">
-      <Filter>src\Paperworks</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Paperworks\Log.h">
-      <Filter>src\Paperworks</Filter>
-    </ClInclude>
     <ClInclude Include="src\Paperworks\Util\FileIO.h">
       <Filter>src\Paperworks\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Paperworks\Window.h">
-      <Filter>src\Paperworks</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1274,8 +1280,17 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Paperworks\Application.cpp">
-      <Filter>src\Paperworks</Filter>
+    <ClCompile Include="src\Paperworks\Core\Application.cpp">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Core\Layer.cpp">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Core\LayerStack.cpp">
+      <Filter>src\Paperworks\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Core\Log.cpp">
+      <Filter>src\Paperworks\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Paperworks\Graphics\API\Buffer.cpp">
       <Filter>src\Paperworks\Graphics\API</Filter>
@@ -1292,7 +1307,13 @@
     <ClCompile Include="src\Paperworks\Graphics\Camera.cpp">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\CameraController.cpp">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Paperworks\Graphics\Renderer.cpp">
+      <Filter>src\Paperworks\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Paperworks\Graphics\Renderer2D.cpp">
       <Filter>src\Paperworks\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Paperworks\Graphics\Shader.cpp">
@@ -1306,15 +1327,6 @@
     </ClCompile>
     <ClCompile Include="src\Paperworks\ImGui\ImGuiLayer.cpp">
       <Filter>src\Paperworks\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Paperworks\Layer.cpp">
-      <Filter>src\Paperworks</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Paperworks\LayerStack.cpp">
-      <Filter>src\Paperworks</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Paperworks\Log.cpp">
-      <Filter>src\Paperworks</Filter>
     </ClCompile>
     <ClCompile Include="src\Paperworks\Util\FileIO.cpp">
       <Filter>src\Paperworks\Util</Filter>

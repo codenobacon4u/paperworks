@@ -70,6 +70,7 @@ links {
     "GLFW",
     "GLAD",
     "ImGui",
+	"opengl32.lib"
 }
 
 filter "system:linux"
@@ -85,7 +86,6 @@ links {
 }
 
 defines {
-    "PW_PLATFORM_LINUX",
     "PW_BUILD_DLL",
     "GLFW_INCLUDE_NONE"
 }
@@ -100,13 +100,11 @@ links {
 
 defines {
     "PW_BUILD_DLL",
-    "PW_PLATFORM_WINDOWS",
     "GLFW_INCLUDE_NONE"
 }
 
 filter "configurations:Debug"
 defines "PW_DEBUG"
-defines "PW_ASSERT_ENABLE"
 runtime "Debug"
 symbols "on"
 
@@ -160,17 +158,9 @@ links {
     "pthread"
 }
 
-defines {
-    "PW_PLATOFRM_LINUX"
-}
-
 filter "system:windows"
 systemversion "latest"
 toolset "v142"
-
-defines {
-    "PW_PLATFORM_WINDOWS"
-}
 
 filter "configurations:Debug"
 defines "PW_DEBUG"

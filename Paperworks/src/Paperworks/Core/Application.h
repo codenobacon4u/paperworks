@@ -1,16 +1,20 @@
 #pragma once
 
 #include "Window.h"
-#include "Paperworks/Core.h"
-#include "Paperworks/LayerStack.h"
+
+#include "Paperworks/Core/Core.h"
+#include "Paperworks/Core/LayerStack.h"
+#include "Paperworks/Core/Time.h"
+
 #include "Paperworks/Events/Event.h"
-#include "Paperworks/Graphics/Shader.h"
-#include "Paperworks/ImGui/ImGuiLayer.h"
 #include "Paperworks/Events/ApplicationEvent.h"
+
+#include "Paperworks/ImGui/ImGuiLayer.h"
+
+#include "Paperworks/Graphics/Shader.h"
 #include "Paperworks/Graphics/API/Buffer.h"
 #include "Paperworks/Graphics/API/VertexArray.h"
 #include "Paperworks/Graphics/Camera.h"
-#include "Paperworks/Core/Time.h"
 
 namespace Paperworks {
 	class Application
@@ -30,10 +34,11 @@ namespace Paperworks {
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
-		std::unique_ptr<Window> m_Window;
+		Unique<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
-		bool m_Running = true;
+		bool m_Running = true, m_Minimized = false;
 		LayerStack m_LayerStack;
 		float m_LastFrame = 0.0f;
 

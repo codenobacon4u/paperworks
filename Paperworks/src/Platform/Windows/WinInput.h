@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Paperworks/Input.h"
+#include "Paperworks/Core/Input.h"
 
 namespace Paperworks {
 

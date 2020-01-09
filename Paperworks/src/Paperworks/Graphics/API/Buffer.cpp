@@ -7,26 +7,26 @@
 
 namespace Paperworks {
 
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+	Shared<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexBuffer(vertices, size);
+			return CreateShared<OpenGLVertexBuffer>(vertices, size);
 		}
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Shared<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLIndexBuffer(indices, count);
+			return CreateShared<OpenGLIndexBuffer>(indices, count);
 		}
 		return nullptr;
 	}

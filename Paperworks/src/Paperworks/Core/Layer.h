@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Paperworks/Core.h"
+#include "Paperworks/Core/Core.h"
 #include "Paperworks/Events/Event.h"
 #include "Paperworks/Core/Time.h"
 

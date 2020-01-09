@@ -2,7 +2,7 @@
 
 #include "pwpch.h"
 
-#include "Paperworks/Core.h"
+#include "Paperworks/Core/Core.h"
 #include "Paperworks/Events/Event.h"
 
 namespace Paperworks {
@@ -13,7 +13,7 @@ namespace Paperworks {
 		unsigned int Height;
 
 		WindowProps(const std::string& title = "Paperworks Engine",
-					unsigned int width = 1280, unsigned int height = 720)
+					unsigned int width = 1920, unsigned int height = 1080)
 			: Title(title), Width(width), Height(height) {}
 	};
 
@@ -35,6 +35,6 @@ namespace Paperworks {
 		// Gets the actual window object for the platform
 		virtual void* GetNativeWindow() const = 0;
 
-		static Window* Create(const WindowProps& props = WindowProps());
+		static Unique<Window> Create(const WindowProps& props = WindowProps());
 	};
 }
