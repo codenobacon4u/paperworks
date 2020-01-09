@@ -3,7 +3,7 @@
 !vendor/bin/premake/
 bin-int/
 
-#Visual Studio
+# Visual Studio
 .vs/
 **.sln
 **.user
