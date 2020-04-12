@@ -8,10 +8,12 @@ namespace Paperworks {
 	public:
 		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
 
-		inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
-		inline static std::pair<float, float> GetMousePosition() { return s_Instance->GetMousePositionImpl(); }
-		inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
-		inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
+		static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
+		static std::pair<float, float> GetMousePosition() { return s_Instance->GetMousePositionImpl(); }
+		static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
+		static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
+
+		static Unique<Input> Create();
 	protected:
 		// Impl methods are implemented per-platform to add specifics for each platform
 		virtual bool IsKeyPressedImpl(int keycode) = 0;
@@ -21,6 +23,6 @@ namespace Paperworks {
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
 	private:
-		static Input* s_Instance;
+		static Unique<Input> s_Instance;
 	};
 }

@@ -23,15 +23,20 @@ namespace Paperworks {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& path)
-		: m_RendererID(0)
 	{
 		std::string source = FileIO::ReadFile(path);
 		auto shaders = PreProcess(source);
 		Compile(shaders);
+
+		auto lastSlash = path.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = path.rfind('.');
+		auto count = lastDot == std::string::npos ? path.size() - lastSlash : lastDot - lastSlash;
+		m_Name = path.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
-		: m_RendererID(0)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> shaders;
 
@@ -50,6 +55,13 @@ namespace Paperworks {
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		if (location == -1) PW_CORE_ERROR("Error uploading uniform int to shader: {0} doesn't exist!", name);
 		glUniform1i(location, value);
+	}
+
+	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		if (location == -1) PW_CORE_ERROR("Error uploading uniform int array to shader: {0} doesn't exist!", name);
+		glUniform1iv(location, count, values);
 	}
 	
 	void OpenGLShader::SetFloat(const std::string& name, float value)
@@ -110,7 +122,7 @@ namespace Paperworks {
 
 		const char* typeIndicator = "#type";
 		size_t typeLength = strlen(typeIndicator);
-		size_t pos = src.find(typeIndicator);
+		size_t pos = src.find(typeIndicator, 0);
 		while (pos != std::string::npos) {
 			size_t eol = src.find_first_of("\r\n", pos);
 			PW_CORE_ASSERT(eol != std::string::npos, "Syntax Error!");

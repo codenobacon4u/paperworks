@@ -20,6 +20,7 @@ namespace Paperworks {
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
@@ -56,7 +57,7 @@ namespace Paperworks {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-
+		
 		stbi_image_free(data);
 	}
 
@@ -76,4 +77,11 @@ namespace Paperworks {
 	{
 		glBindTextureUnit(slot, m_RendererID);
 	}
+
+	void OpenGLTexture2D::Unbind(uint32_t slot) const
+	{
+		//glBindTextureUnit(0, 0);
+	}
+	/*	glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);*/
 }

@@ -60,7 +60,7 @@ DebugLayer::DebugLayer()
 	std::string baseVertSrc = Paperworks::FileIO::ReadFile("assets/shaders/base.vert");
 	std::string baseFragSrc = Paperworks::FileIO::ReadFile("assets/shaders/base.frag");
 
-	m_Shader = Paperworks::Shader::Create(baseVertSrc, baseFragSrc);
+	m_Shader = Paperworks::Shader::Create("base", baseVertSrc, baseFragSrc);
 
 	m_TextureShader = Paperworks::Shader::Create("assets/shaders/textured-old.glsl");
 

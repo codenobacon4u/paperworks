@@ -21,7 +21,10 @@ namespace Paperworks {
 		glm::vec3 GetPosition() const { return m_CamPos; }
 
 		float GetZoom() const { return m_Zoom; }
-		void SetZoom(float level) { m_Zoom = level; }
+		void SetZoom(float level) { 
+			m_Zoom = level; 
+			m_Camera.SetProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+		}
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& event);
 		bool OnWindowResized(WindowResizeEvent& event);

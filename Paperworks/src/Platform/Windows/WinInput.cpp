@@ -6,8 +6,6 @@
 
 namespace Paperworks {
 
-	Input* Input::s_Instance = new WinInput();
-
 	bool WinInput::IsKeyPressedImpl(int keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());

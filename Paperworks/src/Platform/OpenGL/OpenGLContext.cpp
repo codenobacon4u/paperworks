@@ -16,7 +16,9 @@ namespace Paperworks {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		PW_CORE_ASSERT(status, "Failed to initialize Glad!");
 
-		PW_CORE_INFO("OpenGL \n Version: {0}\n Graphics: {1}", glGetString(GL_VERSION), glGetString(GL_RENDERER));
+		PW_CORE_INFO("API:      OpenGL");
+		PW_CORE_INFO("Version:  {0}", glGetString(GL_VERSION));
+		PW_CORE_INFO("Graphics: {0}", glGetString(GL_RENDERER));
 	}
 
 	void OpenGLContext::SwapBuffers() {

@@ -47,8 +47,8 @@ namespace Paperworks {
 			case ShaderDataType::Float2: return 2;
 			case ShaderDataType::Float3: return 3;
 			case ShaderDataType::Float4: return 4;
-			case ShaderDataType::Mat3:   return 3;
-			case ShaderDataType::Mat4:   return 4;
+			case ShaderDataType::Mat3:   return 3 * 3;
+			case ShaderDataType::Mat4:   return 4 * 4;
 			case ShaderDataType::Int:    return 1;
 			case ShaderDataType::Int2:   return 2;
 			case ShaderDataType::Int3:   return 3;
@@ -89,9 +89,12 @@ namespace Paperworks {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void SetData(const void* data, uint32_t size) = 0;
+
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
 
+		static Shared<VertexBuffer> Create(uint32_t size);
 		static Shared<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 

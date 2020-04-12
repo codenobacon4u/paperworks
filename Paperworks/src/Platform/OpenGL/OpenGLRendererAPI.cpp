@@ -16,9 +16,9 @@ namespace Paperworks {
 	{
 		switch (severity)
 		{
-		case GL_DEBUG_SEVERITY_HIGH:         PW_CORE_CRITICAL(message); return;
-		case GL_DEBUG_SEVERITY_MEDIUM:       PW_CORE_ERROR(message); return;
-		case GL_DEBUG_SEVERITY_LOW:          PW_CORE_WARN(message); return;
+		case GL_DEBUG_SEVERITY_HIGH:         PW_CORE_CRITICAL("{0} Source: {1}", message, source); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       PW_CORE_ERROR("{0} Source: {1}", message, source); return;
+		case GL_DEBUG_SEVERITY_LOW:          PW_CORE_WARN("{0} Source: {1}", message, source); return;
 		case GL_DEBUG_SEVERITY_NOTIFICATION: PW_CORE_TRACE(message); return;
 		}
 
@@ -55,9 +55,16 @@ namespace Paperworks {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const Shared<VertexArray>& vertexArray)
+	std::pair<int, int> OpenGLRendererAPI::GetViewport()
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		int viewport[4];
+		glGetIntegerv(GL_VIEWPORT, viewport);
+		return std::pair<int, int>(viewport[2], viewport[3]);
+	}
+
+	void OpenGLRendererAPI::DrawIndexed(const Shared<VertexArray>& vertexArray, uint32_t indexCount)
+	{
+		glDrawElements(GL_TRIANGLES, indexCount ? vertexArray->GetIndexBuffer()->GetCount() : indexCount, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

@@ -18,12 +18,6 @@ namespace Paperworks {
 		PW_CORE_ERROR("GLFW Error ({0}): {1}", error, desc);
 	}
 
-	// Returns a new WinWindow object when on Windows
-	Unique<Window> Window::Create(const WindowProps& props)
-	{
-		return CreateUnique<WinWindow>(props);
-	}
-
 	// Initializes the WinWindow object created by Window::Create
 	WinWindow::WinWindow(const WindowProps& props)
 	{
@@ -61,11 +55,10 @@ namespace Paperworks {
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		++s_GLFWWindowCount;
 
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = Context::Create(m_Window);
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
 
 		// Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)

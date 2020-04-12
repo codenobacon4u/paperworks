@@ -1,5 +1,6 @@
 #include "pwpch.h"
 #include "Renderer.h"
+
 #include "Renderer2D.h"
 
 namespace Paperworks {
@@ -42,6 +43,7 @@ namespace Paperworks {
 		shader->SetMat4("u_MVP.proj", s_SceneData->Projection);
 		shader->SetMat4("u_MVP.view", s_SceneData->View);
 		shader->SetMat4("u_MVP.modl", transform);
+
 		vertexArray->Bind();
 		RenderCmd::DrawIndexed(vertexArray);
 	}

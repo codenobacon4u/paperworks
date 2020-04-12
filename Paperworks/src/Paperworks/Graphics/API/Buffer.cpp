@@ -6,6 +6,17 @@
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace Paperworks {
+	Shared<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			return nullptr;
+		case RendererAPI::API::OpenGL:
+			return CreateShared<OpenGLVertexBuffer>(size);
+		}
+		return nullptr;
+	}
 
 	Shared<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{

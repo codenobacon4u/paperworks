@@ -1,8 +1,6 @@
 #include "pwpch.h"
 #include "Application.h"
 
-#include "Input.h"
-
 #include "Paperworks/Util/FileIO.h"
 #include "Paperworks/Graphics/Renderer.h"
 
@@ -18,7 +16,6 @@ namespace Paperworks {
 		s_Instance = this;
 		m_Window = Window::Create();
 		m_Window->SetEventCallback(PW_BIND_EVENT_FN(Application::OnEvent));
-
 		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
@@ -60,18 +57,19 @@ namespace Paperworks {
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime(); // Platform::GetTime()
-			Time ts = time - m_LastFrame;
+			Time timestep = time - m_LastFrame;
 			m_LastFrame = time;
 
-			if (!m_Minimized)
+			if (!m_Minimized) 
+			{
 				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(ts);
-			
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
-			m_ImGuiLayer->End();
-			
+					layer->OnUpdate(timestep);
+
+				m_ImGuiLayer->Begin();
+				for (Layer* layer : m_LayerStack)
+					layer->OnImGuiRender();
+				m_ImGuiLayer->End();
+			}
 			m_Window->OnUpdate();
 		}
 	}

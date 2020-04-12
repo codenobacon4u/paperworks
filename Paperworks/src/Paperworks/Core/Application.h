@@ -16,6 +16,8 @@
 #include "Paperworks/Graphics/API/VertexArray.h"
 #include "Paperworks/Graphics/Camera.h"
 
+int main(int argc, char** argv);
+
 namespace Paperworks {
 	class Application
 	{
@@ -23,16 +25,17 @@ namespace Paperworks {
 		Application();
 		virtual ~Application();
 
-		void Run();
 		void Close();
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline static Application& Get() { return *s_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
+		static Application& Get() { return *s_Instance; }
+		Window& GetWindow() { return *m_Window; }
 	private:
+		void Run();
+
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
@@ -43,6 +46,7 @@ namespace Paperworks {
 		float m_LastFrame = 0.0f;
 
 		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	Application* CreateApplication();
