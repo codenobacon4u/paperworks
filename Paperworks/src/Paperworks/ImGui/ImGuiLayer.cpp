@@ -34,7 +34,6 @@ namespace Paperworks {
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;
 		//io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports;
-		io.IniFilename = nullptr;
 
 		ImGui::StyleColorsDark();
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -43,7 +42,6 @@ namespace Paperworks {
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
-
 
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());

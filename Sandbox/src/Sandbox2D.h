@@ -7,7 +7,7 @@
 class Sandbox2D : public Paperworks::Layer
 {
 #define LENGTH 100
-#define WIDTH 100
+#define WIDTH  100
 public:
 	Sandbox2D();
 	virtual ~Sandbox2D() = default;
@@ -21,11 +21,12 @@ public:
 
 private:
 	void RandomizeTiles();
-	void None();
-	void OnWindowResize(Paperworks::WindowResizeEvent& event);
 
 	Paperworks::CameraController m_CameraController;
 	std::map<std::string, Paperworks::Shared<Paperworks::Texture2D>> m_Textures;
-	std::array<std::string, LENGTH * WIDTH> m_MapTextures;
+	std::string m_MapTextures[10000];
+
+	Paperworks::Shared<Paperworks::Framebuffer> m_Framebuffer;
+	bool gameRunning;
 };
 

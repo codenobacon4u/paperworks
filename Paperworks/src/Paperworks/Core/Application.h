@@ -22,7 +22,7 @@ namespace Paperworks {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Paperworks Engine");
 		virtual ~Application();
 
 		void Close();

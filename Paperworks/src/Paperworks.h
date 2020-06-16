@@ -23,6 +23,7 @@
 #include "Paperworks/Graphics/Shader.h"
 #include "Paperworks/Graphics/Texture.h"
 #include "Paperworks/Graphics/API/VertexArray.h"
+#include "Paperworks/Graphics/API/Framebuffer.h"
 
 #include "Paperworks/Graphics/Camera.h"
 #include "Paperworks/Graphics/CameraController.h"

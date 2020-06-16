@@ -1,6 +1,6 @@
 workspace "Paperworks"
 architecture "x64"
-startproject "Sandbox"
+startproject "DrawingBoard"
 
 configurations {
     "Debug",
@@ -22,6 +22,7 @@ IncludeDir["ImGui"] = "Paperworks/vendor/ImGui"
 IncludeDir["glm"] = "Paperworks/vendor/glm"
 IncludeDir["spdlog"] = "Paperworks/vendor/spdlog/include"
 IncludeDir["stb_image"] = "Paperworks/vendor/stb_image"
+IncludeDir["Vulkan"] = "C:/VulkanSDK/1.1.114.0/Include"
 
 group "Dependencies"
 include "Paperworks/vendor/GLFW"
@@ -63,14 +64,20 @@ includedirs {
     "%{IncludeDir.GLAD}",
     "%{IncludeDir.ImGui}",
     "%{IncludeDir.glm}",
-    "%{IncludeDir.stb_image}"
+    "%{IncludeDir.stb_image}",
+	"%{IncludeDir.Vulkan}",
+}
+
+libdirs {
+	"C:/VulkanSDK/1.1.114.0/Lib"
 }
 
 links {
     "GLFW",
     "GLAD",
     "ImGui",
-	"opengl32.lib"
+	"opengl32.lib",
+	"vulkan-1.lib"
 }
 
 filter "system:linux"
@@ -120,6 +127,65 @@ optimize "on"
 
 project "Sandbox"
 location "Sandbox"
+kind "ConsoleApp"
+language "C++"
+cppdialect "C++17"
+staticruntime "on"
+
+targetdir("bin/" .. outputdir .. "/%{prj.name}")
+objdir("bin-int/" .. outputdir .. "/%{prj.name}")
+
+files {
+    "%{prj.name}/src/**.h",
+    "%{prj.name}/src/**.cpp"
+}
+
+includedirs {
+    "Paperworks/src",
+    "Paperworks/vendor",
+    "%{IncludeDir.glm}",
+    "%{IncludeDir.spdlog}"
+}
+
+links {
+    "Paperworks"
+}
+
+filter "system:linux"
+
+links {
+    "GLFW",
+    "GLAD",
+    "ImGui",
+    "GLEW",
+    "GLU",
+    "GL",
+    "X11",
+    "dl",
+    "pthread"
+}
+
+filter "system:windows"
+systemversion "latest"
+toolset "v142"
+
+filter "configurations:Debug"
+defines "PW_DEBUG"
+runtime "Debug"
+symbols "on"
+
+filter "configurations:Release"
+defines "PW_RELEASE"
+runtime "Release"
+optimize "on"
+
+filter "configurations:Dist"
+defines "PW_DIST"
+runtime "Release"
+optimize "on"
+
+project "DrawingBoard"
+location "DrawingBoard"
 kind "ConsoleApp"
 language "C++"
 cppdialect "C++17"

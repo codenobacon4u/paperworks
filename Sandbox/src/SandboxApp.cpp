@@ -7,7 +7,8 @@
 class Sandbox : public Paperworks::Application
 {
 public:
-	Sandbox() {
+	Sandbox() 
+	{
 		//PushLayer(new DebugLayer());
 		PushLayer(new Sandbox2D());
 	}
