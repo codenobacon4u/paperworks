@@ -87,7 +87,7 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::End();
 	
 	if (showColor) {
-		ImGui::SetNextWindowSize(glm::vec2(300.0f, 500.0f), ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(300.0f, 500.0f), ImGuiCond_Once);
 		ImGui::Begin("Edit Transform");
 		ImGui::ColorPicker4("Tint", (float*)&color);
 		ImGui::SliderFloat3("Position", (float*)&position, -10.0f, 10.0f);

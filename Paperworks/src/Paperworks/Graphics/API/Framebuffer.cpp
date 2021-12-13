@@ -18,4 +18,7 @@ namespace Paperworks {
 		}
 		return nullptr;
 	}
+	FramebufferSpec::FramebufferSpec()
+	{
+	}
 }
